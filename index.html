@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BioAcoustics | Aprenda Efeito Doppler e Lei de Snell</title>
+<title>BioAcoustics Lab | Efeito Doppler e Refração Acústica (Snell)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * {
     margin: 0;
@@ -17,533 +17,834 @@
 body {
     font-family: 'Inter', sans-serif;
     background: #f0f4f8;
-    color: #1a2a3a;
+    color: #1e293b;
     line-height: 1.5;
 }
 
 .edu-header {
     background: linear-gradient(135deg, #1e4a6b 0%, #0f2c3d 100%);
     color: white;
-    padding: 24px 32px;
+    padding: 20px;
     text-align: center;
     border-bottom: 4px solid #f59e0b;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .edu-header h1 {
     font-size: 1.8rem;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    margin-bottom: 8px;
+    font-weight: 700;
+    margin-bottom: 4px;
 }
 
 .edu-header h1 i {
     color: #f59e0b;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
 .edu-header .subtitle {
     font-size: 0.9rem;
-    opacity: 0.85;
-    max-width: 700px;
+    opacity: 0.9;
+    max-width: 800px;
     margin: 0 auto;
+    font-weight: 300;
 }
 
 .container {
-    max-width: 1300px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 20px;
+    padding: 16px;
+}
+
+/* ACORDEÃO TEÓRICO */
+.theory-accordion {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #cbd5e1;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.theory-trigger {
+    width: 100%;
+    background: #e2e8f0;
+    padding: 14px 20px;
+    border: none;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+}
+
+.theory-trigger:hover {
+    background: #cbd5e1;
+}
+
+.theory-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #fff;
+}
+
+.theory-inner {
+    padding: 20px;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.theory-section {
+    margin-bottom: 16px;
+}
+
+.theory-section h4 {
+    color: #1e4a6b;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.theory-section p {
+    margin-bottom: 8px;
+    text-align: justify;
+}
+
+/* ===== ESTILOS PARA FÓRMULAS MATEMÁTICAS ===== */
+.math-block {
+    background: #f1f5f9;
+    border-left: 6px solid #0284c7;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border-radius: 0 12px 12px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    font-family: 'Times New Roman', 'Georgia', serif;
+}
+
+.math-block .formula {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-style: italic;
+}
+
+.math-block .formula .hl {
+    color: #b45309;
+    background: #fef3c7;
+    padding: 0 6px;
+    border-radius: 4px;
+}
+
+.math-block .formula .hl-blue {
+    color: #0369a1;
+    background: #e0f2fe;
+    padding: 0 6px;
+    border-radius: 4px;
+}
+
+.math-block .desc {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 4px;
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Fórmulas com frações usando display flex */
+.math-frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 4px;
+}
+.math-frac .num {
+    border-bottom: 2px solid #1e293b;
+    padding: 0 8px 2px 8px;
+}
+.math-frac .den {
+    padding: 2px 8px 0 8px;
+}
+
+.math-frac-sm {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 2px;
+    font-size: 0.85em;
+}
+.math-frac-sm .num {
+    border-bottom: 1.5px solid #1e293b;
+    padding: 0 4px 1px 4px;
+}
+.math-frac-sm .den {
+    padding: 1px 4px 0 4px;
+}
+
+.math-symbol {
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-style: italic;
+}
+.math-symbol .sub {
+    font-size: 0.7em;
+    vertical-align: sub;
+}
+.math-symbol .sup {
+    font-size: 0.7em;
+    vertical-align: super;
+}
+
+.math-eq {
+    display: inline-block;
+    padding: 0 4px;
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-style: italic;
+    font-size: 1.1rem;
 }
 
 .edu-card {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
-    margin-bottom: 28px;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
     overflow: hidden;
     border: 1px solid #e2e8f0;
 }
 
 .card-header {
     background: #f8fafc;
-    padding: 16px 24px;
+    padding: 12px 20px;
     border-bottom: 2px solid #e2e8f0;
     display: flex;
     align-items: center;
     gap: 12px;
-    flex-wrap: wrap;
 }
 
 .card-header-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     background: #e0f2fe;
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #0284c7;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .card-header h2 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    color: #0f3b2c;
+    color: #0f172a;
 }
 
 .card-header .badge {
     background: #dcfce7;
     color: #15803d;
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 500;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
     margin-left: auto;
 }
 
 .control-panel {
     background: #f8fafc;
-    padding: 20px 24px;
+    padding: 16px 20px;
     border-bottom: 1px solid #e2e8f0;
-}
-
-.control-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #475569;
 }
 
 .controls-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
     align-items: flex-end;
 }
 
 .control-group-edu {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
+    flex: 1;
+    min-width: 140px;
 }
 
 .control-group-edu label {
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
     color: #64748b;
-}
-
-.control-group-edu label i {
-    width: 20px;
-    color: #0284c7;
 }
 
 .control-group-edu input,
 .control-group-edu select {
     background: white;
     border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 8px 14px;
+    border-radius: 8px;
+    padding: 6px 12px;
     font-size: 0.85rem;
-    font-weight: 500;
     color: #1e293b;
-    transition: all 0.2s;
-    cursor: pointer;
-    min-width: 100px;
+    width: 100%;
 }
 
-.control-group-edu input:focus,
-.control-group-edu select:focus {
-    outline: none;
-    border-color: #0284c7;
-    box-shadow: 0 0 0 3px rgba(2,132,199,0.1);
+.btn-container {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .btn-edu {
     padding: 8px 20px;
-    border-radius: 40px;
+    border-radius: 99px;
     font-weight: 600;
     font-size: 0.8rem;
     border: none;
     cursor: pointer;
-    transition: all 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.btn-edu-primary {
-    background: #0284c7;
-    color: white;
-}
-
-.btn-edu-primary:hover {
-    background: #0369a1;
-    transform: translateY(-1px);
-}
-
-.btn-edu-secondary {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    color: #334155;
-}
-
-.btn-edu-secondary:hover {
-    background: #e2e8f0;
-}
-
-.btn-edu-warning {
-    background: #fef3c7;
-    color: #b45309;
-}
-
-.btn-edu-warning:hover {
-    background: #fde68a;
-}
+.btn-edu-primary { background: #0284c7; color: white; }
+.btn-edu-primary:hover { background: #0369a1; }
+.btn-edu-secondary { background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155; }
+.btn-edu-secondary:hover { background: #e2e8f0; }
+.btn-edu-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.btn-edu-warning:hover { background: #fde68a; }
+.btn-edu-success { background: #10b981; color: white; }
+.btn-edu-success:hover { background: #059669; }
 
 .charts-area {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 24px;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 16px;
+    padding: 16px;
 }
 
-@media (max-width: 800px) {
-    .charts-area {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 850px) {
+    .charts-area { grid-template-columns: 1fr; }
 }
 
 .canvas-box {
-    background: #fefefe;
-    border-radius: 16px;
+    background: #ffffff;
+    border-radius: 12px;
     border: 1px solid #e2e8f0;
     overflow: hidden;
 }
 
 .canvas-title {
     background: #f8fafc;
-    padding: 10px 16px;
+    padding: 8px 16px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 600;
     color: #475569;
     border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    text-transform: uppercase;
 }
 
-canvas {
-    display: block;
+.simulation-container {
+    position: relative;
     width: 100%;
-    height: auto;
-    background: #ffffff;
+    height: 240px;
+}
+
+#simCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.small-chart-container {
+    position: relative;
+    height: 105px;
+    width: 100%;
+    padding: 6px;
 }
 
 .info-panel-edu {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 16px 24px;
-    background: #f1f5f9;
+    gap: 16px;
+    padding: 12px;
+    background: #f8fafc;
     border-top: 1px solid #e2e8f0;
     flex-wrap: wrap;
 }
 
 .info-chip {
     background: white;
-    border-radius: 40px;
-    padding: 8px 20px;
+    border-radius: 10px;
+    padding: 8px 16px;
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     border: 1px solid #e2e8f0;
+    min-width: 180px;
 }
 
-.info-chip .label {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #64748b;
-    text-transform: uppercase;
-}
-
-.info-chip .value {
-    font-size: 1rem;
-    font-weight: 700;
-}
+.info-chip i { font-size: 1.1rem; }
+.info-chip .label { font-size: 0.65rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
+.info-chip .value { font-size: 0.95rem; font-weight: 700; }
 
 .freq-value { color: #059669; }
 .intensity-value { color: #d97706; }
 
 .spectrum-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 20px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .spectrum-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
     border-bottom: 2px solid #e2e8f0;
 }
 
-.spectrum-header i {
-    font-size: 1.5rem;
-    color: #059669;
-}
+.spectrum-header i { font-size: 1.2rem; color: #0284c7; }
+.spectrum-header h3 { font-size: 1.1rem; font-weight: 700; color: #1e4a6b; }
 
-.spectrum-header h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1e4a6b;
-}
-
-.legend {
-    display: flex;
-    gap: 24px;
-    margin-top: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    font-size: 0.7rem;
-}
-
-.legend-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
 }
 
 .snell-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 24px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 16px;
+    padding: 16px;
 }
 
-@media (max-width: 800px) {
-    .snell-grid {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 850px) {
+    .snell-grid { grid-template-columns: 1fr; }
 }
 
-.edu-tip {
-    background: #e0f2fe;
-    border-left: 4px solid #0284c7;
-    padding: 12px 20px;
-    margin: 16px 24px;
+.snell-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+}
+
+#snellCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.math-display {
+    background: #1e293b;
+    color: #38bdf8;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    margin: 8px;
+    border-left: 4px solid #38bdf8;
+}
+
+.math-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.math-val { color: #34d399; font-weight: bold; }
+
+.explain-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px;
+    font-size: 0.8rem;
+    color: #166534;
+}
+
+.explain-box strong {
+    color: #14532d;
+}
+
+/* CAIXA DE DESAFIO */
+.challenge-box {
+    background: #fff7ed;
+    border: 2px dashed #f97316;
     border-radius: 12px;
-    font-size: 0.75rem;
-    color: #0369a1;
+    padding: 14px;
+    margin: 8px;
+    display: none;
+}
+.challenge-title {
+    color: #c2410c;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
+}
+.challenge-text {
+    font-size: 0.85rem;
+    color: #431407;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+.challenge-inputs {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.challenge-feedback {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Fórmulas nos desafios */
+.challenge-math {
+    background: #27272a;
+    color: #a7f3d0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 10px 0;
+    border-left: 4px solid #f59e0b;
+}
+.challenge-math .math {
+    color: #fcd34d;
+    font-style: italic;
+}
+.challenge-math .math .hl {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.12);
+    padding: 0 6px;
+    border-radius: 4px;
 }
 
 .edu-footer {
     text-align: center;
-    padding: 24px;
+    padding: 16px;
     border-top: 1px solid #e2e8f0;
     margin-top: 20px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: #64748b;
     background: #f8fafc;
-}
-
-[data-tip] {
-    position: relative;
-    cursor: help;
-}
-
-[data-tip]:before {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-6px);
-    background: #1e293b;
-    color: #f1f5f9;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 11px;
-    white-space: nowrap;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.15s;
-    font-family: 'Inter', monospace;
-}
-
-[data-tip]:hover:before {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-4px);
 }
 </style>
 </head>
 <body>
 
 <header class="edu-header">
-    <h1><i class="fas fa-waveform"></i> BioAcoustics Lab</h1>
-    <div class="subtitle">Explore como animais usam o som para se comunicar e localizar presas | Efeito Doppler + Lei de Snell</div>
+    <h1><i class="fas fa-wave-square"></i> BioAcoustics Lab</h1>
+    <div class="subtitle">Plataforma Interativa de Biofísica: Explore propriedades das ondas sonoras e acústica animal de forma compacta e otimizada.</div>
 </header>
 
 <div class="container">
-    <!-- Espectro Animal -->
-    <div class="spectrum-card">
-        <div class="spectrum-header">
-            <i class="fas fa-chart-bar"></i>
-            <h3>📊 Espectro de Frequências dos Animais</h3>
-            <span style="margin-left: auto; font-size: 0.7rem; color: #64748b;">Faixa de produção/percepção sonora</span>
-        </div>
-        <canvas id="spectrumCanvas" width="750" height="260" style="width:100%; max-width:750px; height:auto; margin:0 auto; display:block;"></canvas>
-        <div class="legend">
-            <div class="legend-item"><div class="legend-color" style="background:#3b82f6;"></div><span>Frequência Mínima</span></div>
-            <div class="legend-item"><div class="legend-color" style="background:#22c55e;"></div><span>Frequência Máxima</span></div>
-            <div class="legend-item"><i class="fas fa-info-circle" style="color:#64748b;"></i><span>Escala logarítmica (Hz → kHz)</span></div>
+
+    <!-- ===== FUNDAMENTAÇÃO TEÓRICA ===== -->
+    <div class="theory-accordion">
+        <button class="theory-trigger" onclick="toggleTheory()">
+            <span><i class="fas fa-book-open"></i> 📚 Clique para Ler a Fundamentação Teórica (Biofísica & Biologia)</span>
+            <i class="fas fa-chevron-down" id="theoryIcon"></i>
+        </button>
+        <div class="theory-content" id="theoryContent">
+            <div class="theory-inner">
+                <div class="theory-section">
+                    <h4><i class="fas fa-compress-arrows-alt"></i> 1. O que é Bioacústica e Faixas de Audição?</h4>
+                    <p>A <strong>Bioacústica</strong> estuda a produção, transmissão e recepção de sons pelos animais. Diferentes espécies evoluíram para ouvir em espectros específicos de frequência devido ao seu nicho ecológico. Sons abaixo de 20 Hz são classificados como <em>infrassons</em> (usados por elefantes e baleias para comunicação a longas distâncias), enquanto sons acima de 20.000 Hz são <em>ultrassons</em> (usados por morcegos e golfinhos para navegação precisa de curto alcance).</p>
+                </div>
+                
+                <div class="theory-section">
+                    <h4><i class="fas fa-tachometer-alt"></i> 2. Efeito Doppler e Ecolocalização Animal</h4>
+                    <p>O <strong>Efeito Doppler</strong> é a variação aparente da frequência de uma onda causada pelo movimento relativo entre a fonte emissora e o receptor. Na biologia, morcegos e golfinhos utilizam esse fenômeno através da <strong>ecolocalização ativa</strong>: eles emitem um pulso ultrassônico de alta frequência que colide com presas em movimento. Ao receber o eco de volta, a frequência do som retorna modificada pelo deslocamento cinemático relativo da presa e do próprio predador.</p>
+                    <p>A análise neurológica desse deslocamento Doppler permite que o animal saiba instantaneamente se a presa está se aproximando (frequência aumenta) ou se distanciando (frequência diminui), e a qual velocidade relativa ela se desloca.</p>
+                    
+                    <!-- FÓRMULA DOPPLER DUPLO -->
+                    <div class="math-block">
+                        <div class="formula">
+                            f<sub>eco</sub> = f<sub>0</sub> · 
+                            <span class="hl">
+                                <span class="math-frac">
+                                    <span class="num">v<sub>som</sub> + v<sub>alvo</sub></span>
+                                    <span class="den">v<sub>som</sub> − v<sub>emissor</sub></span>
+                                </span>
+                            </span>
+                            · 
+                            <span class="hl">
+                                <span class="math-frac">
+                                    <span class="num">v<sub>som</sub> + v<sub>emissor</sub></span>
+                                    <span class="den">v<sub>som</sub> − v<sub>alvo</sub></span>
+                                </span>
+                            </span>
+                        </div>
+                        <span class="desc">Eco de duplo percurso: a onda sofre Doppler duas vezes (ida e volta)</span>
+                    </div>
+                </div>
+
+                <div class="theory-section">
+                    <h4><i class="fas fa-water"></i> 3. Lei de Snell Acústica e Refração nos Oceanos</h4>
+                    <p>A <strong>Lei de Snell</strong> dita como uma onda muda de direção ao cruzar a fronteira entre dois meios físicos com velocidades de propagação distintas (fenômeno da <strong>Refração</strong>). Embora seja muito famosa na óptica, ela rege com perfeição as ondas sonoras mecânicas.</p>
+                    <p>No oceano profundo, mudanças de temperatura e pressão geram diferentes camadas hidrodinâmicas. Isso cria o famoso <strong>Canal SOFAR</strong> (<em>Sound Fixing and Ranging</em>), uma camada horizontal onde a velocidade do som atinge seu ponto mínimo. Devido à Lei de Snell, qualquer som que tente escapar desse canal sofre refração contínua de volta para o centro de menor velocidade. O canal funciona como um verdadeiro guia de ondas natural ("fibra óptica acústica"), permitindo que o canto de baleias azuis se propague por bacias oceânicas inteiras sem perder energia significativamente.</p>
+                    
+                    <!-- FÓRMULA SNELL -->
+                    <div class="math-block">
+                        <div class="formula">
+                            <span class="math-frac">
+                                <span class="num">sen(θ<sub>1</sub>)</span>
+                                <span class="den">v<sub>1</sub></span>
+                            </span>
+                            =
+                            <span class="math-frac">
+                                <span class="num">sen(θ<sub>2</sub>)</span>
+                                <span class="den">v<sub>2</sub></span>
+                            </span>
+                        </div>
+                        <span class="desc">Lei de Snell para ondas acústicas (meios com diferentes velocidades de propagação)</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Card Doppler -->
+    <!-- ===== GRÁFICO DE ESPECTRO ===== -->
+    <div class="spectrum-card">
+        <div class="spectrum-header">
+            <i class="fas fa-chart-bar"></i>
+            <h3>📊 Espectro Audiométrico Comparado dos Animais</h3>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="spectrumCanvas"></canvas>
+        </div>
+    </div>
+
+    <!-- ===== DOPPLER ===== -->
     <div class="edu-card">
         <div class="card-header">
-            <div class="card-header-icon"><i class="fas fa-sonar"></i></div>
-            <h2>🌊 Efeito Doppler | Ecolocalização</h2>
-            <div class="badge">Animais: Morcego / Golfinho</div>
+            <div class="card-header-icon"><i class="fas fa-satellite-dish"></i></div>
+            <h2>🌊 Efeito Doppler Dinâmico & Ecolocalização Animal</h2>
+            <div class="badge">Simulador Otimizado</div>
         </div>
 
         <div class="control-panel">
-            <div class="control-title">
-                <i class="fas fa-sliders-h"></i> Parâmetros da Simulação
-                <span style="font-size:0.7rem; margin-left:auto;">Ajuste antes de iniciar</span>
-            </div>
             <div class="controls-row">
                 <div class="control-group-edu">
-                    <label><i class="fas fa-paw"></i> Animal</label>
-                    <select id="animal">
-                        <option value="bat">🦇 Morcego (20-200 kHz)</option>
-                        <option value="dolphin">🐬 Golfinho (40-150 kHz)</option>
+                    <label><i class="fas fa-paw"></i> Emissor</label>
+                    <select id="animal" onchange="updateDefaultFrequency()">
+                        <option value="bat">🦇 Morcego (Ar)</option>
+                        <option value="dolphin">🐬 Golfinho (Água)</option>
                     </select>
                 </div>
                 <div class="control-group-edu">
-                    <label><i class="fas fa-tachometer-alt"></i> Vel. Animal (m/s)</label>
-                    <input type="number" id="vAnimal" value="2.5" step="0.5">
+                    <label>Vel. Animal (m/s)</label>
+                    <input type="number" id="vAnimal" value="10.0" step="0.5">
                 </div>
                 <div class="control-group-edu">
-                    <label><i class="fas fa-bullseye"></i> Vel. Alvo (m/s)</label>
-                    <input type="number" id="vTarget" value="-1.5" step="0.5">
+                    <label>Vel. Alvo (m/s)</label>
+                    <input type="number" id="vTarget" value="-5.0" step="0.5">
                 </div>
                 <div class="control-group-edu">
-                    <label><i class="fas fa-music"></i> Frequência (Hz)</label>
-                    <input type="number" id="freq" value="600">
+                    <label>Frequência (Hz)</label>
+                    <input type="number" id="freq" value="60000" step="1000">
                 </div>
                 <div class="control-group-edu">
-                    <label><i class="fas fa-cube"></i> Tipo de Alvo</label>
+                    <label>Alvo</label>
                     <select id="targetType">
-                        <option value="fish">🐟 Peixe (85% reflexão)</option>
-                        <option value="rock">🪨 Rocha (45% reflexão)</option>
-                        <option value="plastic">🧴 Plástico (15% reflexão)</option>
+                        <option value="fish">🐟 Presa Orgânica (85%)</option>
+                        <option value="rock">🪨 Rocha (45%)</option>
+                        <option value="plastic">🧴 Plástico (15%)</option>
                     </select>
                 </div>
             </div>
-            <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
-                <button class="btn-edu btn-edu-primary" onclick="startDoppler()"><i class="fas fa-play"></i> Iniciar Simulação</button>
-                <button class="btn-edu btn-edu-secondary" onclick="stopDoppler()"><i class="fas fa-stop"></i> Parar</button>
-                <button class="btn-edu btn-edu-warning" onclick="resetPositions()"><i class="fas fa-undo-alt"></i> Resetar Posições</button>
+            <div class="btn-container">
+                <button class="btn-edu btn-edu-primary" id="btnStartDoppler" onclick="startDoppler()"><i class="fas fa-play"></i> Iniciar</button>
+                <button class="btn-edu btn-edu-secondary" onclick="stopDoppler()"><i class="fas fa-pause"></i> Pausar</button>
+                <button class="btn-edu btn-edu-warning" onclick="resetPositions()"><i class="fas fa-sync-alt"></i> Resetar</button>
+                <button class="btn-edu btn-edu-warning" id="btnToggleDopplerChallenge" onclick="toggleDopplerChallengeMode()" style="margin-left: auto;">
+                    <i class="fas fa-trophy"></i> Ativar Modo Desafio
+                </button>
             </div>
+        </div>
+
+        <!-- DESAFIO DOPPLER -->
+        <div class="challenge-box" id="dopplerChallengeBox" style="margin: 16px;">
+            <div class="challenge-title"><i class="fas fa-brain"></i> Desafio de Ecolocalização Ativo!</div>
+            
+            <div class="challenge-math">
+                <span class="math">
+                    f<sub>eco</sub> = f<sub>0</sub> · 
+                    <span class="hl">
+                        <span class="math-frac-sm">
+                            <span class="num">v<sub>som</sub> + v<sub>alvo</sub></span>
+                            <span class="den">v<sub>som</sub> − v<sub>emissor</sub></span>
+                        </span>
+                    </span>
+                    · 
+                    <span class="hl">
+                        <span class="math-frac-sm">
+                            <span class="num">v<sub>som</sub> + v<sub>emissor</sub></span>
+                            <span class="den">v<sub>som</sub> − v<sub>alvo</sub></span>
+                        </span>
+                    </span>
+                </span>
+                <br><span style="font-size:0.75rem; color:#94a3b8; font-family:'Inter',sans-serif;">Doppler duplo para eco retornado (predador → presa → predador)</span>
+            </div>
+            
+            <div class="challenge-text" id="dopplerChallengeText">Carregando pergunta...</div>
+            <div class="challenge-inputs">
+                <input type="number" id="dopplerChallengeUserAnswer" placeholder="Sua resposta" step="1" style="padding:6px; border:1px solid #cbd5e1; border-radius:6px; width:150px; font-size:0.85rem;">
+                <button class="btn-edu btn-edu-success" onclick="checkDopplerChallengeAnswer()">Enviar Resposta</button>
+            </div>
+            <div class="challenge-feedback" id="dopplerChallengeFeedback"></div>
         </div>
 
         <div class="charts-area">
             <div class="canvas-box">
-                <div class="canvas-title"><i class="fas fa-chart-line"></i> Visualização da Onda | Animal 🟣 vs Alvo 🎯</div>
-                <canvas id="simCanvas" width="700" height="380" style="width:100%; height:auto; background:#fefefe;"></canvas>
+                <div class="canvas-title" id="canvasDopplerTitle"><i class="fas fa-eye"></i> Propagação de Ondas</div>
+                <div class="simulation-container">
+                    <canvas id="simCanvas" width="700" height="240"></canvas>
+                </div>
             </div>
-            <div>
-                <div class="canvas-box" style="margin-bottom: 16px;">
-                    <div class="canvas-title"><i class="fas fa-chart-line"></i> Frequência Percebida (Hz)</div>
-                    <canvas id="freqChartCanvas" width="380" height="260" style="width:100%; height:auto;"></canvas>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="canvas-box">
+                    <div class="canvas-title">Frequência do Eco (Hz)</div>
+                    <div class="small-chart-container">
+                        <canvas id="freqChartCanvas"></canvas>
+                    </div>
                 </div>
                 <div class="canvas-box">
-                    <div class="canvas-title"><i class="fas fa-chart-line"></i> Intensidade do Eco (%)</div>
-                    <canvas id="intensityChartCanvas" width="380" height="260" style="width:100%; height:auto;"></canvas>
+                    <div class="canvas-title">Intensidade (%)</div>
+                    <div class="small-chart-container">
+                        <canvas id="intensityChartCanvas"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="info-panel-edu">
             <div class="info-chip">
-                <i class="fas fa-chart-line" style="color:#059669;"></i>
+                <i class="fas fa-headset" style="color:#059669;"></i>
                 <div>
-                    <div class="label">FREQUÊNCIA PERCEBIDA</div>
+                    <div class="label">Eco Retornado</div>
                     <div class="value freq-value" id="currentFreq">-- Hz</div>
                 </div>
             </div>
             <div class="info-chip">
-                <i class="fas fa-bolt" style="color:#d97706;"></i>
+                <i class="fas fa-volume-up" style="color:#d97706;"></i>
                 <div>
-                    <div class="label">INTENSIDADE DO ECO</div>
+                    <div class="label">Intensidade</div>
                     <div class="value intensity-value" id="currentIntensity">-- %</div>
                 </div>
             </div>
         </div>
-
-        <div class="edu-tip">
-            <i class="fas fa-lightbulb"></i>
-            <span><strong>💡 Entenda:</strong> O eco aparece como semicírculo colorido. Verde = eco forte, Laranja = médio, Vermelho = fraco. A frequência aumenta quando o alvo se aproxima!</span>
-        </div>
     </div>
 
-    <!-- Card Lei de Snell -->
+    <!-- ===== SNELL ===== -->
     <div class="edu-card">
         <div class="card-header">
-            <div class="card-header-icon"><i class="fas fa-dice-d6"></i></div>
-            <h2>🌈 Lei de Snell | Refração de Ondas</h2>
-            <div class="badge">n₁·sen(θ₁) = n₂·sen(θ₂)</div>
+            <div class="card-header-icon"><i class="fas fa-water"></i></div>
+            <h2>🐋 Lei de Snell Acústica, Cenários Biofísicos & Canal SOFAR</h2>
+            <div class="badge">Refração de Ondas</div>
+        </div>
+
+        <div class="control-panel" style="border-bottom: 1px solid #cbd5e1;">
+            <div class="controls-row">
+                <div class="control-group-edu" style="max-width: 70%;">
+                    <label><i class="fas fa-globe"></i> Escolha um Cenário Biofísico para Carregar os Valores</label>
+                    <select id="scenariosSnell" onchange="applyScenario()">
+                        <option value="sofar">🐋 Oceano Profundo: Canal SOFAR (Água Quente Superficial para Água Fria Profunda)</option>
+                        <option value="martim">🦅 Caça do Martim-Pescador (Onda de Som/Luz cruzando do Ar para a Água)</option>
+                        <option value="fourEyes">🐟 Peixe-Quatro-Olhos (Luz cruzando do Ar para o Meio Ocular Aquoso)</option>
+                    </select>
+                </div>
+                <div style="flex: 1; display: flex; justify-content: flex-end;">
+                    <button class="btn-edu btn-edu-warning" id="btnToggleChallenge" onclick="toggleChallengeMode()">
+                        <i class="fas fa-trophy"></i> Ativar Modo Desafio
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="snell-grid">
             <div class="canvas-box">
-                <div class="canvas-title"><i class="fas fa-draw-polygon"></i> Interface entre dois meios</div>
-                <canvas id="snellCanvas" width="700" height="320" style="width:100%; height:auto; background:#fefefe;"></canvas>
-                <div class="edu-tip" style="margin: 12px;">
-                    <i class="fas fa-hand-pointer"></i>
-                    <span>Clique e arraste no canvas para mudar o ângulo de incidência!</span>
+                <div class="canvas-title" id="canvasSnellTitle"><i class="fas fa-crosshairs"></i> Clique e Arraste o Emissor para Mudar o Ângulo do Feixe</div>
+                <div class="snell-container">
+                    <canvas id="snellCanvas" width="600" height="220"></canvas>
                 </div>
             </div>
-            <div class="canvas-box">
-                <div class="canvas-title"><i class="fas fa-calculator"></i> Verificação da Lei</div>
-                <canvas id="snellChart" width="700" height="200" style="width:100%; height:auto;"></canvas>
-                <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; justify-content: center; background:#f8fafc; border-top:1px solid #e2e8f0;">
-                    <div class="control-group-edu">
-                        <label><i class="fas fa-angle-double-up"></i> n₁ (meio 1)</label>
-                        <input type="number" id="n1" value="1" step="0.1" style="width:80px;">
+            
+            <div style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="canvas-box" style="height: 100%;">
+                    <div class="canvas-title" id="mathDisplayTitle"><i class="fas fa-calculator"></i> Verificação Biofísica</div>
+                    
+                    <!-- DESAFIO SNELL -->
+                    <div class="challenge-box" id="challengeBox">
+                        <div class="challenge-title"><i class="fas fa-brain"></i> Desafio Biofísico Ativo!</div>
+                        
+                        <div class="challenge-math">
+                            <span class="math">
+                                <span class="math-frac-sm">
+                                    <span class="num">sen(θ<sub>1</sub>)</span>
+                                    <span class="den">v<sub>1</sub></span>
+                                </span>
+                                =
+                                <span class="math-frac-sm">
+                                    <span class="num">sen(θ<sub>2</sub>)</span>
+                                    <span class="den">v<sub>2</sub></span>
+                                </span>
+                            </span>
+                            <br><span style="font-size:0.75rem; color:#94a3b8; font-family:'Inter',sans-serif;">Lei de Snell para ondas acústicas</span>
+                        </div>
+                        
+                        <div class="challenge-text" id="challengeText">Carregando pergunta...</div>
+                        <div class="challenge-inputs">
+                            <input type="number" id="challengeUserAnswer" placeholder="Sua resposta" step="0.01" style="padding:6px; border:1px solid #cbd5e1; border-radius:6px; width:130px; font-size:0.85rem;">
+                            <button class="btn-edu btn-edu-success" onclick="checkChallengeAnswer()">Enviar</button>
+                        </div>
+                        <div class="challenge-feedback" id="challengeFeedback"></div>
                     </div>
-                    <div class="control-group-edu">
-                        <label><i class="fas fa-angle-double-down"></i> n₂ (meio 2)</label>
-                        <input type="number" id="n2" value="1.5" step="0.1" style="width:80px;">
+
+                    <div class="math-display" id="normalMathDisplay">
+                        <div class="math-line"><span id="mathLabel1">Razão Meio 1 (sen(θ₁)/v₁):</span> <span id="mathMeio1" class="math-val">0.00000</span></div>
+                        <div class="math-line"><span id="mathLabel2">Razão Meio 2 (sen(θ₂)/v₂):</span> <span id="mathMeio2" class="math-val">0.00000</span></div>
                     </div>
-                    <div class="control-group-edu">
-                        <label><i class="fas fa-ruler-combined"></i> Ângulo incidência</label>
-                        <input type="number" id="angleIncInput" value="30" min="0" max="180" style="width:80px;">
+
+                    <div class="explain-box" id="sofarExplanation">
+                        <strong>O que é o Canal SOFAR?</strong> (Sound Fixing and Ranging Channel). É uma zona no oceano profundo onde a baixa temperatura e a pressão hidrostática ideal criam uma região onde a velocidade do som é a mínima possível. Atuando como uma lente acústica baseada na Lei de Snell, qualquer som emitido dentro dele e que tente escapar sofre refração de volta ao centro ou Reflexão Interna Total. Isso cria um 'guia de ondas' perfeito, permitindo que o canto das baleias viaje por bacias oceânicas inteiras!
                     </div>
-                    <div class="control-group-edu">
-                        <label><i class="fas fa-ruler"></i> Ângulo refração</label>
-                        <input type="text" id="angleRefrInput" readonly style="width:80px; background:#f1f5f9;">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background:#f8fafc; border-top:1px solid #e2e8f0;">
+                        <div class="control-group-edu">
+                            <label id="lbl_v1">Vel. Meio 1 - v₁ (m/s)</label>
+                            <input type="number" id="v1_snell" value="1530" step="10" min="0.1" max="3000" oninput="drawSnell()">
+                        </div>
+                        <div class="control-group-edu">
+                            <label id="lbl_v2">Vel. Meio 2 - v₂ (m/s)</label>
+                            <input type="number" id="v2_snell" value="1480" step="10" min="0.1" max="3000" oninput="drawSnell()">
+                        </div>
+                        <div class="control-group-edu">
+                            <label id="lbl_angle1">Ângulo Incidente θ₁ (°)</label>
+                            <input type="number" id="angleIncInput" value="45" min="0" max="89" step="1">
+                        </div>
+                        <div class="control-group-edu">
+                            <label id="lbl_angle2">Ângulo Refratado θ₂</label>
+                            <input type="text" id="angleRefrInput" readonly style="background:#f1f5f9;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -551,290 +852,663 @@ canvas {
     </div>
 
     <footer class="edu-footer">
-        <i class="fas fa-graduation-cap"></i> BioAcoustics Lab | Material didático para ensino de biofísica
+        BioAcoustics Lab v4.2 | Biofísica de Ondas e Acústica Marinha Integrada
     </footer>
 </div>
 
 <script>
+// ====================================================
+// CONTROLE DO ACORDEÃO EXPANSÍVEL (TEORIA)
+// ====================================================
+function toggleTheory() {
+    const content = document.getElementById("theoryContent");
+    const icon = document.getElementById("theoryIcon");
+    if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+        content.style.maxHeight = "0px";
+        icon.className = "fas fa-chevron-down";
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.className = "fas fa-chevron-up";
+    }
+}
+
 // ============================
 // GRÁFICO DE ESPECTRO
 // ============================
 const spectrumCtx = document.getElementById("spectrumCanvas").getContext("2d");
 const animaisEspectro = [
-    { nome: "Elefante", min: 5, max: 20 },
-    { nome: "Baleia", min: 10, max: 10000 },
-    { nome: "Cachorro", min: 40, max: 60000 },
-    { nome: "Morcego", min: 20000, max: 200000 },
-    { nome: "Golfinho", min: 40000, max: 150000 },
-    { nome: "Ave", min: 1000, max: 8000 }
+    { nome: "Elefante 🐘", range: [5, 20] },
+    { nome: "Baleia 🐋", range: [10, 10000] },
+    { nome: "Humano 👤", range: [20, 20000] },
+    { nome: "Cachorro 🐕", range: [40, 60000] },
+    { nome: "Golfinho 🐬", range: [40000, 150000] },
+    { nome: "Morcego 🦇", range: [20000, 200000] }
 ];
+
+const barGradient = spectrumCtx.createLinearGradient(0, 0, 500, 0);
+barGradient.addColorStop(0, '#3b82f6');
+barGradient.addColorStop(0.5, '#10b981');
+barGradient.addColorStop(1, '#a855f7');
 
 new Chart(spectrumCtx, {
     type: 'bar',
     data: {
         labels: animaisEspectro.map(a => a.nome),
-        datasets: [
-            { label: 'Frequência Mínima (Hz)', data: animaisEspectro.map(a => a.min), backgroundColor: '#3b82f6', borderRadius: 6, barPercentage: 0.6 },
-            { label: 'Frequência Máxima (Hz)', data: animaisEspectro.map(a => a.max), backgroundColor: '#22c55e', borderRadius: 6, barPercentage: 0.6 }
-        ]
+        datasets: [{
+            label: 'Faixa Audiométrica Alcançada',
+            data: animaisEspectro.map(a => a.range),
+            backgroundColor: barGradient,
+            borderRadius: 8,
+            borderSkipped: false,
+            barThickness: 16
+        }]
     },
     options: {
+        indexAxis: 'y',
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         scales: {
-            y: { type: 'logarithmic', title: { display: true, text: 'Frequência (Hz) - Escala Log', color: '#64748b', font: { size: 10 } }, ticks: { color: '#475569', callback: (v) => v >= 1000 ? `${v/1000}k` : v }, grid: { color: '#e2e8f0' } },
-            x: { ticks: { color: '#475569', font: { size: 10 } }, grid: { display: false } }
+            x: { 
+                type: 'logarithmic', 
+                min: 1,
+                max: 300000,
+                title: { display: true, text: 'Frequência (Hz) em Escala Logarítmica', font: { size: 11, weight: 600 } },
+                ticks: { 
+                    callback: (v) => v >= 1000 ? `${v/1000}k Hz` : `${v} Hz`,
+                    color: '#475569'
+                },
+                grid: { color: '#f1f5f9' }
+            },
+            y: {
+                ticks: { color: '#1e293b', font: { weight: 600 } },
+                grid: { display: false }
+            }
         },
-        plugins: { legend: { labels: { color: '#475569', font: { size: 10 } }, position: 'top' } }
+        plugins: { 
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: (context) => `Alcance: ${context.raw[0]} Hz a ${context.raw[1] >= 1000 ? (context.raw[1]/1000)+'kHz' : context.raw[1]+' Hz'}`
+                }
+            }
+        }
     }
 });
 
 // ============================
-// DOPPLER
+// LÓGICA DO EFEITO DOPPLER
 // ============================
 const simCanvas = document.getElementById("simCanvas");
 const ctx = simCanvas.getContext("2d");
-let animalX = 350, animalY = 200, targetX = 500, targetY = 200;
+let animalX = 150, animalY = 120, targetX = 550, targetY = 120;
 let pulses = [], echoes = [];
-let running = false, lastPulse = 0, animationId = null, pulseInterval = 500;
+let running = false, lastPulse = 0, animationId = null, pulseInterval = 600;
 let frameCount = 0;
-const SOUND_SPEED = 340;
+let dataPointsCounter = 0;
+
+let dopplerChallengeActive = false;
+let correctDopplerChallengeValue = 0;
+
 const TARGET_REFLECTION = { fish: 0.85, rock: 0.45, plastic: 0.15 };
-const ATTENUATION_FACTOR = 0.012;
+const ATTENUATION_FACTOR = 0.003;
 
-let freqChart = new Chart(document.getElementById("freqChartCanvas"), {
-    type: 'line', data: { labels: [], datasets: [{ label: 'Frequência Percebida (Hz)', data: [], borderWidth: 2, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.05)', tension: 0.2, pointRadius: 0, fill: true }] },
-    options: { responsive: true, maintainAspectRatio: true, scales: { y: { title: { display: true, text: 'Hz', color: '#64748b' }, grid: { color: '#e2e8f0' }, ticks: { color: '#475569' } }, x: { grid: { color: '#e2e8f0' }, ticks: { color: '#475569' } } }, plugins: { legend: { labels: { color: '#475569' } } } }
-});
-
-let intensityChart = new Chart(document.getElementById("intensityChartCanvas"), {
-    type: 'line', data: { labels: [], datasets: [{ label: 'Intensidade do Eco (%)', data: [], borderWidth: 2, borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.05)', tension: 0.2, pointRadius: 0, fill: true }] },
-    options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 100, title: { display: true, text: '%', color: '#64748b' }, grid: { color: '#e2e8f0' }, ticks: { color: '#475569' } }, x: { grid: { color: '#e2e8f0' }, ticks: { color: '#475569' } } }, plugins: { legend: { labels: { color: '#475569' } } } }
-});
-
-function dopplerEco(f, vs, va, vt) { 
-    let fa = f * (vs + vt) / (vs - va); 
-    return fa * (vs + va) / (vs - vt); 
+function getSoundSpeed() {
+    return document.getElementById("animal").value === "bat" ? 343 : 1500; 
 }
 
-function calculateEchoIntensity(rf, d) { 
-    return Math.min(100, Math.max(0, rf * Math.exp(-ATTENUATION_FACTOR * d * 2) * 100)); 
+function updateDefaultFrequency() {
+    if (dopplerChallengeActive) return;
+    const animal = document.getElementById("animal").value;
+    document.getElementById("freq").value = (animal === "bat") ? 60000 : 100000;
+}
+
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    scales: { 
+        x: { display: false }, 
+        y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 8 }, color: '#64748b' } } 
+    },
+    plugins: { legend: { display: false } },
+    elements: { line: { tension: 0.2, borderWidth: 2.5 } }
+};
+
+let freqChart = new Chart(document.getElementById("freqChartCanvas").getContext("2d"), {
+    type: 'line', 
+    data: { labels: [], datasets: [{ data: [], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.08)', pointRadius: 1, fill: true }] },
+    options: chartOptions
+});
+
+let intensityChart = new Chart(document.getElementById("intensityChartCanvas").getContext("2d"), {
+    type: 'line', 
+    data: { labels: [], datasets: [{ data: [], borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.08)', pointRadius: 1, fill: true }] },
+    options: { ...chartOptions, scales: { x: { display: false }, y: { min: 0, max: 100, ticks: { font: { size: 8 } } } } }
+});
+
+function calculateDopplerDouble(fEmitida, vSom, vA, vT) {
+    let fAlvo = fEmitida * (vSom + vT) / (vSom - vA);
+    return fAlvo * (vSom + vA) / (vSom - vT);
 }
 
 function resetPositions() { 
-    animalX = 350; animalY = 200; targetX = 500; targetY = 200; 
+    animalX = 150; targetX = 550; 
     pulses = []; echoes = []; 
+    ctx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+    stopDoppler();
+    if (!dopplerChallengeActive) {
+        document.getElementById("currentFreq").innerText = "-- Hz";
+        document.getElementById("currentIntensity").innerText = "-- %";
+    } else {
+        document.getElementById("currentFreq").innerText = "? Hz";
+    }
+    freqChart.data.labels = []; freqChart.data.datasets[0].data = []; freqChart.update();
+    intensityChart.data.labels = []; intensityChart.data.datasets[0].data = []; intensityChart.update();
 }
 
 class Pulse { 
     constructor(x, y) { this.x = x; this.y = y; this.radius = 0; this.hit = false; } 
     update(s) { this.radius += s; } 
-    draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1; ctx.stroke(); } 
+    draw() { 
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); 
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)"; ctx.lineWidth = 1; ctx.stroke(); 
+    } 
 }
 
 class Echo {
-    constructor(x, y, freq, intensity) { this.x = x; this.y = y; this.radius = 0; this.life = 1; this.freq = freq; this.intensity = intensity; }
-    update(s) { this.radius += s; this.life -= 0.006; }
+    constructor(x, y, freq, intensity) { this.x = x; this.y = y; this.radius = 0; this.life = 1.0; this.freq = freq; this.intensity = intensity; }
+    update(s) { this.radius += s; this.life -= 0.015; }
     draw() {
         const dx = animalX - this.x, dy = animalY - this.y, ang = Math.atan2(dy, dx);
-        let alpha = Math.min(0.8, (this.intensity / 100) * this.life);
-        let mainColor = this.intensity > 60 ? `rgba(5,150,105,${alpha})` : (this.intensity > 30 ? `rgba(217,119,6,${alpha})` : `rgba(220,38,38,${alpha})`);
-        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, ang - Math.PI / 1.8, ang + Math.PI / 1.8);
-        ctx.strokeStyle = mainColor; ctx.lineWidth = 2 + (this.intensity / 30); ctx.stroke();
-        ctx.font = `bold ${8 + Math.floor(this.intensity / 25)}px monospace`;
-        ctx.fillStyle = mainColor; ctx.fillText(`${Math.round(this.freq)}Hz`, this.x - 20, this.y - 12);
+        let alpha = Math.min(0.7, (this.intensity / 100) * this.life);
+        if(alpha < 0) alpha = 0;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, ang - Math.PI / 4, ang + Math.PI / 4);
+        ctx.strokeStyle = `rgba(5,150,105,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
     }
 }
 
 function startDoppler() {
     if (animationId) cancelAnimationFrame(animationId);
-    lastPulse = 0; frameCount = 0; resetPositions(); pulses = []; echoes = []; running = true;
-    freqChart.data.labels = []; freqChart.data.datasets[0].data = []; 
-    intensityChart.data.labels = []; intensityChart.data.datasets[0].data = [];
-    freqChart.update(); intensityChart.update();
+    running = true;
+    lastPulse = performance.now();
     animateDoppler(performance.now());
 }
 
-function stopDoppler() { running = false; if (animationId) { cancelAnimationFrame(animationId); animationId = null; } }
+function stopDoppler() { running = false; if (animationId) cancelAnimationFrame(animationId); }
 
-function animateDoppler(time = 0) {
+function animateDoppler(time) {
     if (!running) return;
     ctx.clearRect(0, 0, simCanvas.width, simCanvas.height);
-    ctx.fillStyle = "#fefefe"; ctx.fillRect(0, 0, simCanvas.width, simCanvas.height);
     
+    let vSom = getSoundSpeed();
     let vAnimal = parseFloat(document.getElementById("vAnimal").value) || 0;
     let vTarget = parseFloat(document.getElementById("vTarget").value) || 0;
     const freqEmitida = parseFloat(document.getElementById("freq").value);
     const animalType = document.getElementById("animal").value;
     const targetType = document.getElementById("targetType").value;
-    const reflectionFactor = TARGET_REFLECTION[targetType];
     
-    animalX += vAnimal * 1.5; targetX += vTarget * 1.5;
-    const margin = 35;
-    if (animalX < margin) { animalX = margin; vAnimal = Math.abs(vAnimal); document.getElementById("vAnimal").value = vAnimal; }
-    if (animalX > simCanvas.width - margin) { animalX = simCanvas.width - margin; vAnimal = -Math.abs(vAnimal); document.getElementById("vAnimal").value = vAnimal; }
-    if (targetX < margin) { targetX = margin; vTarget = Math.abs(vTarget); document.getElementById("vTarget").value = vTarget; }
-    if (targetX > simCanvas.width - margin) { targetX = simCanvas.width - margin; vTarget = -Math.abs(vTarget); document.getElementById("vTarget").value = vTarget; }
-    if (animalY < margin) animalY = margin; if (animalY > simCanvas.height - margin) animalY = simCanvas.height - margin;
-    if (targetY < margin) targetY = margin; if (targetY > simCanvas.height - margin) targetY = simCanvas.height - margin;
+    animalX += vAnimal * 0.15; 
+    targetX += vTarget * 0.15;
     
-    // Desenha animal
-    ctx.fillStyle = animalType === "bat" ? "#8B5CF6" : "#3B82F6";
-    ctx.beginPath(); ctx.ellipse(animalX, animalY, 12, 8, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#1a2a3a"; ctx.font = "18px monospace"; ctx.fillText(animalType === "bat" ? "🦇" : "🐬", animalX - 10, animalY - 8);
+    if (animalX < 20 || animalX > simCanvas.width - 20) vAnimal *= -1;
+    if (targetX < 20 || targetX > simCanvas.width - 20) vTarget *= -1;
+
+    ctx.fillStyle = animalType === "bat" ? "#f8fafc" : "#e0f2fe";
+    ctx.fillRect(0,0,simCanvas.width,simCanvas.height);
+
+    ctx.fillStyle = "#1e293b"; ctx.font = "20px Arial";
+    ctx.fillText(animalType === "bat" ? "🦇" : "🐬", animalX - 10, animalY + 7);
+    ctx.fillText(targetType === 'fish' ? "🐟" : (targetType === 'rock' ? "🪨" : "🧴"), targetX - 10, targetY + 7);
+
+    if (time - lastPulse > pulseInterval) {
+        pulses.push(new Pulse(animalX, animalY));
+        lastPulse = time;
+    }
     
-    // Desenha alvo
-    let targetColor = targetType === 'fish' ? "#22c55e" : (targetType === 'rock' ? "#a855f7" : "#ef4444");
-    ctx.fillStyle = targetColor; ctx.fillRect(targetX - 12, targetY - 12, 24, 24);
-    ctx.fillStyle = "white"; ctx.font = "20px monospace"; ctx.fillText(targetType === 'fish' ? "🐟" : (targetType === 'rock' ? "🪨" : "🧴"), targetX - 9, targetY + 6);
-    
-    // Mostra velocidades
-    ctx.font = "10px monospace"; ctx.fillStyle = "#64748b";
-    ctx.fillText(`${vAnimal.toFixed(1)} m/s`, animalX - 20, animalY - 12);
-    ctx.fillText(`${vTarget.toFixed(1)} m/s`, targetX - 20, targetY - 18);
-    
-    if (time - lastPulse > pulseInterval) { pulses.push(new Pulse(animalX, animalY)); lastPulse = time; }
-    
+    let visualWaveSpeed = vSom * 0.004;
+
     for (let p of pulses) {
-        p.update(4.5);
-        const dist = Math.hypot(p.x - targetX, p.y - targetY);
-        const distanceToTarget = Math.hypot(animalX - targetX, animalY - targetY);
-        if (!p.hit && dist <= p.radius + 12) {
+        p.update(visualWaveSpeed);
+        let distanceToTarget = Math.abs(p.x - targetX);
+        if (!p.hit && distanceToTarget < p.radius) {
             p.hit = true;
-            let f_percebida = dopplerEco(freqEmitida, SOUND_SPEED, vAnimal, vTarget);
-            f_percebida = Math.min(Math.max(f_percebida, freqEmitida * 0.5), freqEmitida * 1.5);
-            let intensityPercent = calculateEchoIntensity(reflectionFactor, distanceToTarget);
-            echoes.push(new Echo(targetX, targetY, f_percebida, intensityPercent));
+            let fPercebida = calculateDopplerDouble(freqEmitida, vSom, vAnimal, vTarget);
+            let distReal = Math.abs(animalX - targetX);
+            let intensidade = Math.min(100, Math.max(5, TARGET_REFLECTION[targetType] * Math.exp(-ATTENUATION_FACTOR * distReal) * 100));
             
-            let direcao = vTarget > vAnimal ? "↗️" : (vTarget < vAnimal ? "↙️" : "➡️");
-            let variacao = f_percebida > freqEmitida ? "↑" : (f_percebida < freqEmitida ? "↓" : "=");
-            document.getElementById("currentFreq").innerHTML = `${Math.round(f_percebida)} Hz ${variacao} ${direcao}`;
-            document.getElementById("currentIntensity").innerHTML = `${Math.round(intensityPercent)}% ${intensityPercent > 60 ? "🔊🔊" : (intensityPercent > 30 ? "🔊" : "🔈")}`;
+            echoes.push(new Echo(targetX, targetY, fPercebida, intensidade));
             
-            if (frameCount % 2 === 0) {
-                freqChart.data.labels.push(frameCount); freqChart.data.datasets[0].data.push(f_percebida);
-                if (freqChart.data.labels.length > 60) { freqChart.data.labels.shift(); freqChart.data.datasets[0].data.shift(); }
-                freqChart.update('none');
-                intensityChart.data.labels.push(frameCount); intensityChart.data.datasets[0].data.push(intensityPercent);
-                if (intensityChart.data.labels.length > 60) { intensityChart.data.labels.shift(); intensityChart.data.datasets[0].data.shift(); }
-                intensityChart.update('none');
+            if (!dopplerChallengeActive) {
+                document.getElementById("currentFreq").innerText = `${Math.round(fPercebida)} Hz`;
+                document.getElementById("currentIntensity").innerText = `${Math.round(intensidade)} %`;
+            } else {
+                document.getElementById("currentFreq").innerText = "? Hz";
             }
+
+            dataPointsCounter++;
+            freqChart.data.labels.push(dataPointsCounter); 
+            freqChart.data.datasets[0].data.push(fPercebida);
+            
+            intensityChart.data.labels.push(dataPointsCounter); 
+            intensityChart.data.datasets[0].data.push(intensidade);
+            
+            if(freqChart.data.labels.length > 12) { freqChart.data.labels.shift(); freqChart.data.datasets[0].data.shift(); }
+            if(intensityChart.data.labels.length > 12) { intensityChart.data.labels.shift(); intensityChart.data.datasets[0].data.shift(); }
+            
+            freqChart.update(); 
+            intensityChart.update();
         }
         p.draw();
     }
-    for (let e of echoes) { e.update(4.5); e.draw(); }
-    pulses = pulses.filter(p => p.radius < 600);
+
+    for (let e of echoes) { e.update(visualWaveSpeed); e.draw(); }
+
+    pulses = pulses.filter(p => p.radius < simCanvas.width);
     echoes = echoes.filter(e => e.life > 0);
+    
     frameCount++;
     animationId = requestAnimationFrame(() => animateDoppler(performance.now()));
 }
 
-// ============================
-// LEI DE SNELL
-// ============================
+function toggleDopplerChallengeMode() {
+    dopplerChallengeActive = !dopplerChallengeActive;
+    const btn = document.getElementById("btnToggleDopplerChallenge");
+    const box = document.getElementById("dopplerChallengeBox");
+    const canvasTitle = document.getElementById("canvasDopplerTitle");
+
+    const inputs = ["vAnimal", "vTarget", "freq", "animal", "targetType"];
+
+    if (dopplerChallengeActive) {
+        stopDoppler();
+        resetPositions();
+        btn.innerHTML = "<i class='fas fa-eye'></i> Voltar ao Modo Livre";
+        btn.className = "btn-edu btn-edu-secondary";
+        box.style.display = "block";
+        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Animação pausada para análise do desafio estatístico.";
+        
+        inputs.forEach(id => document.getElementById(id).disabled = true);
+        generateDopplerChallenge();
+    } else {
+        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Modo Desafio";
+        btn.className = "btn-edu btn-edu-warning";
+        box.style.display = "none";
+        canvasTitle.innerHTML = "<i class='fas fa-eye'></i> Propagação de Ondas";
+        
+        inputs.forEach(id => document.getElementById(id).disabled = false);
+        document.getElementById("currentFreq").innerText = "-- Hz";
+        updateDefaultFrequency();
+    }
+}
+
+function generateDopplerChallenge() {
+    document.getElementById("dopplerChallengeUserAnswer").value = "";
+    document.getElementById("dopplerChallengeFeedback").innerText = "";
+
+    const challengeType = Math.floor(Math.random() * 2);
+    const animal = document.getElementById("animal").value;
+    
+    let vSom = (animal === "bat") ? 340 : 1500;
+    let vA = 10; 
+    let vT = -5; 
+    let fEmitida = (animal === "bat") ? 50000 : 100000;
+
+    document.getElementById("vAnimal").value = vA;
+    document.getElementById("vTarget").value = vT;
+    document.getElementById("freq").value = fEmitida;
+
+    let fEcoExata = calculateDopplerDouble(fEmitida, vSom, vA, vT);
+
+    let txt = "";
+    if (animal === "bat") {
+        txt = "Um morcego voa a 10 m/s em direção a uma mariposa que voa a 5 m/s na direção oposta (aproximação mútua, velocidade do alvo igual a -5 m/s). Sabendo que a velocidade do som no ar é de 340 m/s: ";
+        if (challengeType === 0) {
+            txt += "Se o morcego emite um pulso ultra-sónico estável de 50000 Hz, qual será a frequência final em Hz do eco retornado captado pelo morcego?";
+            correctDopplerChallengeValue = fEcoExata;
+        } else {
+            txt = "Um morcego emite um pulso de 50000 Hz contra um inseto com velocidade de -5 m/s. Se o eco de retorno medido pelo morcego é de " + Math.round(fEcoExata) + " Hz, qual é a velocidade de voo do morcego em m/s? (Considere velocidade do som no ar como 340 m/s)";
+            correctDopplerChallengeValue = vA;
+        }
+    } else {
+        txt = "Um golfinho em águas calmas (velocidade do som igual a 1500 m/s) emite cliques a 100000 Hz enquanto nada a 10 m/s atrás de um peixe que foge a 5 m/s (velocidade do alvo igual a -5 m/s). ";
+        if (challengeType === 0) {
+            txt += "Qual será o valor arredondado da frequência em Hz do eco recebido de volta pelo golfinho?";
+            correctDopplerChallengeValue = fEcoExata;
+        } else {
+            txt = "Um golfinho emite cliques a 100000 Hz perseguindo uma presa a -5 m/s. Se o sistema biológico dele deteta o eco de retorno calibrado em " + Math.round(fEcoExata) + " Hz, qual é a velocidade de nado do golfinho em m/s? (Velocidade do som na água igual a 1500 m/s)";
+            correctDopplerChallengeValue = vA;
+        }
+    }
+
+    document.getElementById("dopplerChallengeText").innerText = txt;
+}
+
+function checkDopplerChallengeAnswer() {
+    const userAns = parseFloat(document.getElementById("dopplerChallengeUserAnswer").value);
+    const feedback = document.getElementById("dopplerChallengeFeedback");
+
+    if (isNaN(userAns)) {
+        feedback.innerText = "Por favor, insira um valor numérico inteiro.";
+        feedback.style.color = "#ea580c";
+        return;
+    }
+
+    const diff = Math.abs(userAns - correctDopplerChallengeValue);
+    if (diff <= 5) {
+        feedback.innerText = "Parabéns! Resposta correta. Resposta exata calculada pelo sistema: " + Math.round(correctDopplerChallengeValue) + " Hz/unidades.";
+        feedback.style.color = "#16a34a";
+    } else {
+        feedback.innerText = "Valor incorreto. Dica: Lembre-se que a onda sofre alteração de frequência duas vezes (na ida até ao alvo e no retorno do eco). Tente novamente!";
+        feedback.style.color = "#dc2626";
+    }
+}
+
+// ====================================================
+// LEI DE SNELL COM CENÁRIOS CONFIGURÁVEIS
+// ====================================================
 const snellCanvas = document.getElementById("snellCanvas");
 const snellCtx = snellCanvas.getContext("2d");
-const snellChartCtx = document.getElementById("snellChart").getContext("2d");
 const angleIncInput = document.getElementById("angleIncInput");
 const angleRefrInput = document.getElementById("angleRefrInput");
 
-let x0 = 350, y0 = 160, L = 120;
-let angleIncDeg = 30;
+let x0 = 300, y0 = 110, rL = 90; 
+let angleIncDeg = 45; 
+let currentQuadrant = 1; 
 let draggingSnell = false;
 
-function degToRad(d) { return d * Math.PI / 180; }
-function radToDeg(r) { return r * 180 / Math.PI; }
+let challengeModeActive = false;
+let correctChallengeValue = 0;
+
+const SCENARIOS = {
+    sofar: {
+        v1: 1530, v2: 1480,
+        name1: "ÁGUA QUENTE / SUPERFÍCIE (Oceano)",
+        name2: "ÁGUA FRIA / CANAL SOFAR (Profundidade)",
+        lbl1: "Vel. Água Quente (m/s)", lbl2: "Vel. Água Fria (m/s)",
+        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica [sen(θ₁)/v₁ = sen(θ₂)/v₂]",
+        mathLabel1: "Razão Meio 1 (sen(θ₁)/v₁):", mathLabel2: "Razão Meio 2 (sen(θ₂)/v₂):",
+        icon: "🐋",
+        explanation: "<strong>O que é o Canal SOFAR?</strong> (Sound Fixing and Ranging Channel). É uma zona no oceano profundo onde a baixa temperatura e a pressão hidrostática ideal criam uma região onde a velocidade do som é a mínima possível. Atuando como uma lente acústica baseada na Lei de Snell, qualquer som emitido dentro dele e que tente escapar sofre refração de volta ao centro ou Reflexão Interna Total. Isso cria um 'guia de ondas' perfeito, permitindo que o canto das baleias viaje por bacias oceânicas inteiras!"
+    },
+    martim: {
+        v1: 343, v2: 1480,
+        name1: "MEIO EXTERNO (Ar Atmosférico)",
+        name2: "MEIO AQUÁTICO (Rio/Mar)",
+        lbl1: "Vel. Som no Ar (m/s)", lbl2: "Vel. Som na Água (m/s)",
+        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica [sen(θ₁)/v₁ = sen(θ₂)/v₂]",
+        mathLabel1: "Razão Meio 1 (sen(θ₁)/v₁):", mathLabel2: "Razão Meio 2 (sen(θ₂)/v₂):",
+        icon: "🦅",
+        explanation: "<strong>O Martim-Pescador e a Barreira de Meios:</strong> Quando a ave vocaliza ou mergulha, as ondas mecânicas e luminosas sofrem uma transição drástica do Ar para a Água. Pelo fato da velocidade mudar abruptamente, o ângulo se fecha severamente de acordo com a Lei de Snell. Para a captura mecânica e a visão corretiva da presa, o animal precisa calcular instintivamente essa distorção angular!"
+    },
+    fourEyes: {
+        v1: 1.0, v2: 1.33,
+        name1: "MEIO AÉREO (Visão de Cima - Ar)",
+        name2: "CÓRNEA / ÁGUA (Visão de Baixo)",
+        lbl1: "Índice do Ar (n₁)", lbl2: "Índice da Água (n₂)",
+        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Óptica [n₁·sen(θ₁) = n₂·sen(θ₂)]",
+        mathLabel1: "Razão Meio 1 (n₁·sen(θ₁)):", mathLabel2: "Razão Meio 2 (n₂·sen(θ₂)):",
+        icon: "🐟",
+        explanation: "<strong>O Peixe-Quatro-Olhos (Anableps anableps):</strong> Este incrível animal vive estritamente na linha d'água. Seus olhos são divididos ao meio. A metade superior capta luz vinda do ar (n₁ = 1.0) e a inferior capta na água (n₂ = 1.33). A Lei de Snell força a luz externa a desviar, e o peixe possui lentes cristalinas com geometrias assimétricas diferentes para focar perfeitamente ambos os feixes simultaneamente!"
+    }
+};
+
+function applyScenario() {
+    const selected = document.getElementById("scenariosSnell").value;
+    const config = SCENARIOS[selected];
+    
+    document.getElementById("v1_snell").value = config.v1;
+    document.getElementById("v2_snell").value = config.v2;
+    
+    document.getElementById("lbl_v1").innerText = config.lbl1;
+    document.getElementById("lbl_v2").innerText = config.lbl2;
+    document.getElementById("lbl_angle1").innerText = config.lblAngle1;
+    document.getElementById("lbl_angle2").innerText = config.lblAngle2;
+    
+    document.getElementById("mathDisplayTitle").innerHTML = config.mathTitle;
+    document.getElementById("mathLabel1").innerText = config.mathLabel1;
+    document.getElementById("mathLabel2").innerText = config.mathLabel2;
+    
+    document.getElementById("sofarExplanation").innerHTML = config.explanation;
+    
+    if (challengeModeActive) {
+        generateChallenge();
+    } else {
+        drawSnell();
+    }
+}
 
 function drawSnell() {
     snellCtx.clearRect(0, 0, snellCanvas.width, snellCanvas.height);
-    const n1 = parseFloat(document.getElementById("n1").value);
-    const n2 = parseFloat(document.getElementById("n2").value);
+    const v1 = parseFloat(document.getElementById("v1_snell").value) || 0.001;
+    const v2 = parseFloat(document.getElementById("v2_snell").value) || 0.001;
     
-    // Fundo
-    snellCtx.fillStyle = "#e0f2fe"; snellCtx.fillRect(0, 0, snellCanvas.width, y0);
-    snellCtx.fillStyle = "#fef3c7"; snellCtx.fillRect(0, y0, snellCanvas.width, snellCanvas.height - y0);
+    const selected = document.getElementById("scenariosSnell").value;
+    const config = SCENARIOS[selected];
+
+    snellCtx.fillStyle = selected === "sofar" ? "#e0f2fe" : "#f8fafc"; 
+    snellCtx.fillRect(0, 0, snellCanvas.width, y0);
     
-    // Linha da interface
+    snellCtx.fillStyle = selected === "sofar" ? "#0c4a6e" : "#0284c7"; 
+    snellCtx.fillRect(0, y0, snellCanvas.width, snellCanvas.height - y0);
+    
+    snellCtx.fillStyle = selected === "sofar" ? "#0369a1" : "#475569"; 
+    snellCtx.font = "bold 10px Inter";
+    snellCtx.fillText(`${config.name1} [Valor: ${v1}]`, 15, 20);
+    
+    snellCtx.fillStyle = selected === "sofar" ? "#bae6fd" : "#ffffff";
+    snellCtx.fillText(`${config.name2} [Valor: ${v2}]`, 15, y0 + 20);
+    
     snellCtx.beginPath(); snellCtx.moveTo(0, y0); snellCtx.lineTo(snellCanvas.width, y0);
+    snellCtx.strokeStyle = "#38bdf8"; snellCtx.lineWidth = 2; snellCtx.stroke();
+    
+    snellCtx.beginPath(); snellCtx.moveTo(x0, 10); snellCtx.lineTo(x0, snellCanvas.height - 10);
+    snellCtx.strokeStyle = "#94a3b8"; snellCtx.setLineDash([4, 4]); snellCtx.lineWidth = 1; snellCtx.stroke(); snellCtx.setLineDash([]);
+    
+    let signedAngle = (currentQuadrant === 1) ? angleIncDeg : -angleIncDeg;
+    let theta1Rad = (signedAngle * Math.PI) / 180;
+    
+    let xInc = x0 + rL * Math.sin(theta1Rad);
+    let yInc = y0 - rL * Math.cos(theta1Rad);
+    
+    snellCtx.beginPath(); snellCtx.moveTo(xInc, yInc); snellCtx.lineTo(x0, y0);
     snellCtx.strokeStyle = "#f59e0b"; snellCtx.lineWidth = 3; snellCtx.stroke();
     
-    // Normal
-    snellCtx.beginPath(); snellCtx.moveTo(x0, y0 - 80); snellCtx.lineTo(x0, y0 + 80);
-    snellCtx.strokeStyle = "rgba(0,0,0,0.2)"; snellCtx.setLineDash([5, 5]); snellCtx.stroke(); snellCtx.setLineDash([]);
+    snellCtx.save(); snellCtx.translate(xInc, yInc);
+    snellCtx.rotate(-theta1Rad + Math.PI);
+    snellCtx.font = "18px Arial"; snellCtx.fillText(config.icon, -10, 7); snellCtx.restore();
+
+    let sinTheta2;
+    let razaoMeio1, razaoMeio2;
     
-    const thetaI = degToRad(angleIncDeg);
-    const xInc = x0 - L * Math.cos(thetaI);
-    const yInc = y0 - L * Math.sin(thetaI);
+    if (selected === "fourEyes") {
+        sinTheta2 = (v1 / v2) * Math.sin(theta1Rad);
+        razaoMeio1 = v1 * Math.sin(Math.abs(theta1Rad));
+    } else {
+        sinTheta2 = (v2 / v1) * Math.sin(theta1Rad);
+        razaoMeio1 = Math.sin(Math.abs(theta1Rad)) / v1;
+    }
     
-    // Raio incidente
-    snellCtx.beginPath(); snellCtx.moveTo(xInc, yInc); snellCtx.lineTo(x0, y0);
-    snellCtx.strokeStyle = "#d97706"; snellCtx.lineWidth = 3; snellCtx.stroke();
-    
-    // Fonte
-    snellCtx.save(); snellCtx.translate(xInc, yInc); snellCtx.rotate(-thetaI);
-    snellCtx.font = "24px Arial"; snellCtx.fillStyle = "#d97706"; snellCtx.fillText("🔦", -12, 6);
-    snellCtx.restore();
-    
-    let sinT2 = (n1 / n2) * Math.sin(thetaI);
-    let refrDeg = NaN;
-    
-    if (Math.abs(sinT2) <= 1) {
-        const theta2 = Math.asin(sinT2);
-        refrDeg = radToDeg(theta2);
-        const xRefr = x0 + L * Math.cos(theta2);
-        const yRefr = y0 + L * Math.sin(theta2);
+    document.getElementById("mathMeio1").innerText = razaoMeio1.toFixed(5);
+
+    if (Math.abs(sinTheta2) <= 1.0) {
+        let theta2Rad = Math.asin(sinTheta2);
+        let theta2Deg = (theta2Rad * 180) / Math.PI;
+        
+        let xRefr = x0 - rL * Math.sin(theta2Rad);
+        let yRefr = y0 + rL * Math.cos(theta2Rad);
+        
         snellCtx.beginPath(); snellCtx.moveTo(x0, y0); snellCtx.lineTo(xRefr, yRefr);
-        snellCtx.strokeStyle = "#059669"; snellCtx.lineWidth = 3; snellCtx.stroke();
-        snellCtx.font = "bold 12px monospace"; snellCtx.fillStyle = "#059669";
-        snellCtx.fillText(`${refrDeg.toFixed(1)}°`, xRefr - 25, yRefr - 8);
+        snellCtx.strokeStyle = "#10b981"; snellCtx.lineWidth = 3; snellCtx.stroke();
+        
+        angleRefrInput.value = `${Math.abs(theta2Deg).toFixed(1)}°`;
+        
+        if (selected === "fourEyes") {
+            razaoMeio2 = v2 * Math.sin(Math.abs(theta2Rad));
+        } else {
+            razaoMeio2 = Math.sin(Math.abs(theta2Rad)) / v2;
+        }
+        document.getElementById("mathMeio2").innerText = razaoMeio2.toFixed(5);
+        
+        snellCtx.fillStyle = "#d97706"; snellCtx.font = "bold 11px Inter";
+        snellCtx.fillText(`θ₁: ${Math.abs(angleIncDeg)}°`, xInc + (currentQuadrant === 1 ? 15 : -40), yInc - 4);
+        snellCtx.fillStyle = "#10b981";
+        snellCtx.fillText(`θ₂: ${Math.abs(theta2Deg).toFixed(1)}°`, xRefr + (currentQuadrant === 1 ? -45 : 15), yRefr + 12);
     } else {
-        const xRefl = x0 - L * Math.cos(thetaI);
-        const yRefl = y0 + L * Math.sin(thetaI);
+        let xRefl = x0 - rL * Math.sin(theta1Rad);
+        let yRefl = y0 - rL * Math.cos(theta1Rad);
+        
         snellCtx.beginPath(); snellCtx.moveTo(x0, y0); snellCtx.lineTo(xRefl, yRefl);
-        snellCtx.strokeStyle = "#dc2626"; snellCtx.lineWidth = 3; snellCtx.stroke();
-        snellCtx.font = "bold 12px monospace"; snellCtx.fillStyle = "#dc2626";
-        snellCtx.fillText("REFLEXÃO TOTAL", x0 - 70, y0 + 40);
-    }
-    
-    snellCtx.font = "bold 12px monospace"; snellCtx.fillStyle = "#d97706";
-    snellCtx.fillText(`${angleIncDeg.toFixed(1)}°`, xInc - 35, yInc - 10);
-    
-    angleRefrInput.value = isNaN(refrDeg) ? "Total" : refrDeg.toFixed(1);
-    
-    // Gráfico de verificação
-    snellChartCtx.clearRect(0, 0, snellChart.width, snellChart.height);
-    snellChartCtx.fillStyle = "#f8fafc"; snellChartCtx.fillRect(0, 0, snellChart.width, snellChart.height);
-    snellChartCtx.font = "bold 12px monospace"; snellChartCtx.fillStyle = "#d97706";
-    snellChartCtx.fillText(`Ângulo de Incidência: ${angleIncDeg.toFixed(1)}°`, 20, 30);
-    if (isNaN(refrDeg)) {
-        snellChartCtx.fillStyle = "#dc2626"; snellChartCtx.fillText("REFLEXÃO INTERNA TOTAL", 20, 60);
-    } else {
-        snellChartCtx.fillStyle = "#059669"; snellChartCtx.fillText(`Ângulo de Refração: ${refrDeg.toFixed(1)}°`, 20, 60);
-        snellChartCtx.fillStyle = "#475569"; snellChartCtx.font = "11px monospace";
-        snellChartCtx.fillText(`n₁·sen(θ₁) = ${(n1 * Math.sin(degToRad(angleIncDeg))).toFixed(3)}`, 20, 90);
-        snellChartCtx.fillText(`n₂·sen(θ₂) = ${(n2 * Math.sin(degToRad(refrDeg))).toFixed(3)}`, 20, 115);
+        snellCtx.strokeStyle = "#ef4444"; snellCtx.lineWidth = 3; snellCtx.stroke();
+        
+        angleRefrInput.value = "Reflexão Total";
+        document.getElementById("mathMeio2").innerText = selected === "sofar" ? "R.I.T.A." : "R.I.T.";
+        
+        snellCtx.fillStyle = "#ef4444"; snellCtx.font = "bold 11px Inter";
+        snellCtx.fillText(selected === "sofar" ? "⚠️ Reflexão Interna Total Acústica" : "⚠️ Reflexão Interna Total", x0 + (currentQuadrant === 1 ? -150 : 20), y0 - 20);
     }
 }
 
-angleIncInput.addEventListener("input", () => { angleIncDeg = Math.min(Math.max(parseFloat(angleIncInput.value) || 0, 0), 180); drawSnell(); });
-snellCanvas.addEventListener("mousedown", e => { draggingSnell = true; updateAngleFromMouse(e); });
-snellCanvas.addEventListener("mousemove", e => { if (draggingSnell) updateAngleFromMouse(e); });
-snellCanvas.addEventListener("mouseup", () => draggingSnell = false);
-
-function updateAngleFromMouse(e) {
+function handleMouseSnell(e) {
+    if (challengeModeActive) return; 
     const rect = snellCanvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const dx = x0 - mx, dy = y0 - my;
-    let ang = radToDeg(Math.atan2(dy, dx));
-    if (ang < 0) ang += 360;
-    if (ang > 180) ang = 180;
-    angleIncDeg = ang;
-    angleIncInput.value = angleIncDeg.toFixed(1);
-    drawSnell();
+    const mx = (e.clientX - rect.left) * (snellCanvas.width / rect.width);
+    const my = (e.clientY - rect.top) * (snellCanvas.height / rect.height);
+    
+    if (my < y0) {
+        let dx = mx - x0;
+        let dy = y0 - my;
+        
+        currentQuadrant = (dx >= 0) ? 1 : 2;
+        
+        let angDeg = Math.round((Math.atan2(Math.abs(dx), dy) * 180) / Math.PI);
+        angleIncDeg = Math.min(Math.max(angDeg, 0), 89);
+        angleIncInput.value = angleIncDeg;
+        drawSnell();
+    }
 }
 
-drawSnell();
+snellCanvas.addEventListener("mousedown", e => { draggingSnell = true; handleMouseSnell(e); });
+snellCanvas.addEventListener("mousemove", e => { if (draggingSnell) handleMouseSnell(e); });
+window.addEventListener("mouseup", () => draggingSnell = false);
+
+angleIncInput.addEventListener("input", () => {
+    if (challengeModeActive) return;
+    angleIncDeg = Math.min(Math.max(parseInt(angleIncInput.value) || 0, 0), 89);
+    drawSnell();
+});
+
+function toggleChallengeMode() {
+    challengeModeActive = !challengeModeActive;
+    const btn = document.getElementById("btnToggleChallenge");
+    const box = document.getElementById("challengeBox");
+    const mathDisplay = document.getElementById("normalMathDisplay");
+    const canvasTitle = document.getElementById("canvasSnellTitle");
+
+    if (challengeModeActive) {
+        btn.innerHTML = "<i class='fas fa-eye'></i> Voltar ao Modo Livre";
+        btn.className = "btn-edu btn-edu-secondary";
+        box.style.display = "block";
+        mathDisplay.style.display = "none";
+        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Interface travada para o Desafio!";
+        generateChallenge();
+    } else {
+        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Modo Desafio";
+        btn.className = "btn-edu btn-edu-warning";
+        box.style.display = "none";
+        mathDisplay.style.display = "block";
+        canvasTitle.innerHTML = "<i class='fas fa-crosshairs'></i> Clique e Arraste o Emissor para Mudar o Ângulo do Feixe";
+        
+        document.getElementById("v1_snell").readOnly = false;
+        document.getElementById("v2_snell").readOnly = false;
+        document.getElementById("angleIncInput").readOnly = false;
+        
+        applyScenario();
+    }
+}
+
+function generateChallenge() {
+    document.getElementById("challengeUserAnswer").value = "";
+    document.getElementById("challengeFeedback").innerText = "";
+    
+    const typeOfChallenge = Math.floor(Math.random() * 2);
+    const selected = document.getElementById("scenariosSnell").value;
+    
+    angleIncDeg = 30; 
+    document.getElementById("angleIncInput").value = angleIncDeg;
+    
+    document.getElementById("v1_snell").readOnly = true;
+    document.getElementById("v2_snell").readOnly = true;
+    document.getElementById("angleIncInput").readOnly = true;
+
+    let txt = "";
+    
+    if (selected === "fourEyes") {
+        let n1 = 1.0;
+        let n2 = 1.33;
+        document.getElementById("v1_snell").value = n1;
+        document.getElementById("v2_snell").value = n2;
+        
+        let sinR = (n1 * Math.sin(30 * Math.PI / 180)) / n2;
+        let rDeg = (Math.asin(sinR) * 180 / Math.PI);
+
+        if (typeOfChallenge === 0) {
+            txt = "Se o índice do Ar (n₁) é 1.0, o ângulo incidente é 30 graus e o ângulo refratado medido é " + rDeg.toFixed(1) + " graus, qual é o índice de refração do Meio 2 (n₂)?";
+            correctChallengeValue = n2;
+        } else {
+            txt = "Se o índice do Ar (n₁) é 1.0, o índice da Água (n₂) é 1.33 e o feixe incide a 30 graus, qual será o ângulo refratado medido na córnea (em graus)?";
+            correctChallengeValue = rDeg;
+        }
+    } else {
+        let v1 = 1500;
+        let v2 = 1200;
+        document.getElementById("v1_snell").value = v1;
+        document.getElementById("v2_snell").value = v2;
+        
+        let sinT2 = (v2 / v1) * Math.sin(30 * Math.PI / 180);
+        let t2Deg = (Math.asin(sinT2) * 180 / Math.PI);
+
+        if (typeOfChallenge === 0) {
+            txt = "No cenário atual, a velocidade do som no Meio 1 (v₁) é 1500 m/s. Se o som incide a 30 graus e refrata a " + t2Deg.toFixed(1) + " graus, qual é a velocidade do som no Meio 2 (v₂) em m/s?";
+            correctChallengeValue = v2;
+        } else {
+            txt = "Se a velocidade no Meio 1 é 1500 m/s, a velocidade no Meio 2 é 1200 m/s e o som atinge a interface a 30 graus, qual será o ângulo de refração de saída (em graus)?";
+            correctChallengeValue = t2Deg;
+        }
+    }
+
+    document.getElementById("challengeText").innerText = txt;
+    drawSnellBlanked();
+}
+
+function drawSnellBlanked() {
+    drawSnell();
+    angleRefrInput.value = "?";
+}
+
+function checkChallengeAnswer() {
+    const userAns = parseFloat(document.getElementById("challengeUserAnswer").value);
+    const feedback = document.getElementById("challengeFeedback");
+    
+    if (isNaN(userAns)) {
+        feedback.innerText = "Por favor, insira um número válido.";
+        feedback.style.color = "#ea580c";
+        return;
+    }
+
+    const diff = Math.abs(userAns - correctChallengeValue);
+    if (diff <= 0.5) {
+        feedback.innerText = "Correcto! Excelente cálculo biofísico. Resposta esperada: " + correctChallengeValue.toFixed(1);
+        feedback.style.color = "#16a34a";
+    } else {
+        feedback.innerText = "Ainda não é o valor correto. Tente novamente! Lembre-se de usar a calculadora de apoio.";
+        feedback.style.color = "#dc2626";
+    }
+}
+
+updateDefaultFrequency();
+applyScenario();
 </script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 <title>BioAcoustics Lab | Efeito Doppler e Refração Acústica (Snell)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * {
@@ -117,7 +118,7 @@ body {
     text-align: justify;
 }
 
-/* ===== ESTILOS PARA FÓRMULAS MATEMÁTICAS ===== */
+/* ===== ESTILOS PARA FÓRMULAS MATEMÁTICAS (MATHJAX) ===== */
 .math-block {
     background: #f1f5f9;
     border-left: 6px solid #0284c7;
@@ -126,89 +127,22 @@ body {
     border-radius: 0 12px 12px 0;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    font-family: 'Times New Roman', 'Georgia', serif;
+    overflow-x: auto;
 }
 
 .math-block .formula {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: #0f172a;
-    font-style: italic;
-}
-
-.math-block .formula .hl {
-    color: #b45309;
-    background: #fef3c7;
-    padding: 0 6px;
-    border-radius: 4px;
-}
-
-.math-block .formula .hl-blue {
-    color: #0369a1;
-    background: #e0f2fe;
-    padding: 0 6px;
-    border-radius: 4px;
+    margin-bottom: 8px;
 }
 
 .math-block .desc {
     display: block;
     font-size: 0.8rem;
     color: #64748b;
-    margin-top: 4px;
+    margin-top: 8px;
     font-style: normal;
     font-family: 'Inter', sans-serif;
-}
-
-/* Fórmulas com frações usando display flex */
-.math-frac {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    vertical-align: middle;
-    margin: 0 4px;
-}
-.math-frac .num {
-    border-bottom: 2px solid #1e293b;
-    padding: 0 8px 2px 8px;
-}
-.math-frac .den {
-    padding: 2px 8px 0 8px;
-}
-
-.math-frac-sm {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    vertical-align: middle;
-    margin: 0 2px;
-    font-size: 0.85em;
-}
-.math-frac-sm .num {
-    border-bottom: 1.5px solid #1e293b;
-    padding: 0 4px 1px 4px;
-}
-.math-frac-sm .den {
-    padding: 1px 4px 0 4px;
-}
-
-.math-symbol {
-    font-family: 'Times New Roman', 'Georgia', serif;
-    font-style: italic;
-}
-.math-symbol .sub {
-    font-size: 0.7em;
-    vertical-align: sub;
-}
-.math-symbol .sup {
-    font-size: 0.7em;
-    vertical-align: super;
-}
-
-.math-eq {
-    display: inline-block;
-    padding: 0 4px;
-    font-family: 'Times New Roman', 'Georgia', serif;
-    font-style: italic;
-    font-size: 1.1rem;
 }
 
 .edu-card {
@@ -239,12 +173,14 @@ body {
     justify-content: center;
     color: #0284c7;
     font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .card-header h2 {
     font-size: 1.1rem;
     font-weight: 600;
     color: #0f172a;
+    line-height: 1.2;
 }
 
 .card-header .badge {
@@ -255,6 +191,7 @@ body {
     font-size: 0.75rem;
     font-weight: 600;
     margin-left: auto;
+    white-space: nowrap;
 }
 
 .control-panel {
@@ -276,6 +213,10 @@ body {
     gap: 4px;
     flex: 1;
     min-width: 140px;
+}
+
+.control-group-edu.wide {
+    min-width: 100%;
 }
 
 .control-group-edu label {
@@ -313,7 +254,10 @@ body {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    text-align: center;
+    transition: background 0.2s;
 }
 
 .btn-edu-primary { background: #0284c7; color: white; }
@@ -330,10 +274,6 @@ body {
     grid-template-columns: 1.3fr 0.7fr;
     gap: 16px;
     padding: 16px;
-}
-
-@media (max-width: 850px) {
-    .charts-area { grid-template-columns: 1fr; }
 }
 
 .canvas-box {
@@ -356,13 +296,15 @@ body {
 .simulation-container {
     position: relative;
     width: 100%;
-    height: 240px;
+    aspect-ratio: 700 / 240; /* Mantém a proporção original */
+    max-height: 240px;
 }
 
 #simCanvas {
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: contain;
 }
 
 .small-chart-container {
@@ -390,7 +332,9 @@ body {
     align-items: center;
     gap: 12px;
     border: 1px solid #e2e8f0;
+    flex: 1;
     min-width: 180px;
+    max-width: 300px;
 }
 
 .info-chip i { font-size: 1.1rem; }
@@ -434,20 +378,18 @@ body {
     padding: 16px;
 }
 
-@media (max-width: 850px) {
-    .snell-grid { grid-template-columns: 1fr; }
-}
-
 .snell-container {
     position: relative;
     width: 100%;
-    height: 220px;
+    aspect-ratio: 600 / 220; /* Mantém a proporção original */
+    max-height: 220px;
 }
 
 #snellCanvas {
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: contain;
 }
 
 .math-display {
@@ -461,7 +403,7 @@ body {
     border-left: 4px solid #38bdf8;
 }
 
-.math-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.math-line { display: flex; justify-content: space-between; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
 .math-val { color: #34d399; font-weight: bold; }
 
 .explain-box {
@@ -514,27 +456,25 @@ body {
     font-weight: 600;
 }
 
-/* Fórmulas nos desafios */
+/* Fórmulas nos desafios (MATHJAX) */
 .challenge-math {
     background: #27272a;
     color: #a7f3d0;
     padding: 14px 18px;
     border-radius: 8px;
-    font-family: 'Times New Roman', 'Georgia', serif;
-    font-size: 1.1rem;
     text-align: center;
     margin: 10px 0;
     border-left: 4px solid #f59e0b;
+    overflow-x: auto;
 }
-.challenge-math .math {
-    color: #fcd34d;
-    font-style: italic;
-}
-.challenge-math .math .hl {
-    color: #f472b6;
-    background: rgba(244, 114, 182, 0.12);
-    padding: 0 6px;
-    border-radius: 4px;
+
+.snell-vars-grid {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 8px; 
+    padding: 12px; 
+    background: #f8fafc; 
+    border-top: 1px solid #e2e8f0;
 }
 
 .edu-footer {
@@ -545,6 +485,43 @@ body {
     font-size: 0.75rem;
     color: #64748b;
     background: #f8fafc;
+}
+
+/* ========================================= */
+/* MEDIA QUERIES (RESPONSIVIDADE MÁXIMA)     */
+/* ========================================= */
+
+@media (max-width: 950px) {
+    .charts-area { grid-template-columns: 1fr; }
+    .snell-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .edu-header h1 { font-size: 1.5rem; }
+    .card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .card-header .badge { margin-left: 0; }
+    
+    /* Controles ocupam linha inteira */
+    .controls-row { flex-direction: column; align-items: stretch; }
+    .control-group-edu { min-width: 100%; }
+    
+    /* Botões lado a lado ou empilhados */
+    .btn-container { flex-direction: column; }
+    .btn-edu { width: 100%; margin-left: 0 !important; }
+
+    /* Chips de informação */
+    .info-panel-edu { flex-direction: column; }
+    .info-chip { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .theory-trigger { font-size: 0.9rem; padding: 12px 14px; }
+    .math-block .formula { font-size: 0.9rem; }
+    
+    .snell-vars-grid { grid-template-columns: 1fr; }
+    
+    .challenge-inputs { flex-direction: column; align-items: stretch; }
+    .challenge-inputs input { width: 100% !important; }
 }
 </style>
 </head>
@@ -557,10 +534,9 @@ body {
 
 <div class="container">
 
-    <!-- ===== FUNDAMENTAÇÃO TEÓRICA ===== -->
     <div class="theory-accordion">
         <button class="theory-trigger" onclick="toggleTheory()">
-            <span><i class="fas fa-book-open"></i> 📚 Clique para Ler a Fundamentação Teórica (Biofísica & Biologia)</span>
+            <span><i class="fas fa-book-open"></i> Clique para Ler a Fundamentação Teórica (Biofísica & Biologia)</span>
             <i class="fas fa-chevron-down" id="theoryIcon"></i>
         </button>
         <div class="theory-content" id="theoryContent">
@@ -575,23 +551,9 @@ body {
                     <p>O <strong>Efeito Doppler</strong> é a variação aparente da frequência de uma onda causada pelo movimento relativo entre a fonte emissora e o receptor. Na biologia, morcegos e golfinhos utilizam esse fenômeno através da <strong>ecolocalização ativa</strong>: eles emitem um pulso ultrassônico de alta frequência que colide com presas em movimento. Ao receber o eco de volta, a frequência do som retorna modificada pelo deslocamento cinemático relativo da presa e do próprio predador.</p>
                     <p>A análise neurológica desse deslocamento Doppler permite que o animal saiba instantaneamente se a presa está se aproximando (frequência aumenta) ou se distanciando (frequência diminui), e a qual velocidade relativa ela se desloca.</p>
                     
-                    <!-- FÓRMULA DOPPLER DUPLO -->
                     <div class="math-block">
                         <div class="formula">
-                            f<sub>eco</sub> = f<sub>0</sub> · 
-                            <span class="hl">
-                                <span class="math-frac">
-                                    <span class="num">v<sub>som</sub> + v<sub>alvo</sub></span>
-                                    <span class="den">v<sub>som</sub> − v<sub>emissor</sub></span>
-                                </span>
-                            </span>
-                            · 
-                            <span class="hl">
-                                <span class="math-frac">
-                                    <span class="num">v<sub>som</sub> + v<sub>emissor</sub></span>
-                                    <span class="den">v<sub>som</sub> − v<sub>alvo</sub></span>
-                                </span>
-                            </span>
+                            $$ f_{\text{eco}} = f_0 \cdot \left( \frac{v_{\text{som}} + v_{\text{alvo}}}{v_{\text{som}} - v_{\text{emissor}}} \right) \cdot \left( \frac{v_{\text{som}} + v_{\text{emissor}}}{v_{\text{som}} - v_{\text{alvo}}} \right) $$
                         </div>
                         <span class="desc">Eco de duplo percurso: a onda sofre Doppler duas vezes (ida e volta)</span>
                     </div>
@@ -602,18 +564,9 @@ body {
                     <p>A <strong>Lei de Snell</strong> dita como uma onda muda de direção ao cruzar a fronteira entre dois meios físicos com velocidades de propagação distintas (fenômeno da <strong>Refração</strong>). Embora seja muito famosa na óptica, ela rege com perfeição as ondas sonoras mecânicas.</p>
                     <p>No oceano profundo, mudanças de temperatura e pressão geram diferentes camadas hidrodinâmicas. Isso cria o famoso <strong>Canal SOFAR</strong> (<em>Sound Fixing and Ranging</em>), uma camada horizontal onde a velocidade do som atinge seu ponto mínimo. Devido à Lei de Snell, qualquer som que tente escapar desse canal sofre refração contínua de volta para o centro de menor velocidade. O canal funciona como um verdadeiro guia de ondas natural ("fibra óptica acústica"), permitindo que o canto de baleias azuis se propague por bacias oceânicas inteiras sem perder energia significativamente.</p>
                     
-                    <!-- FÓRMULA SNELL -->
                     <div class="math-block">
                         <div class="formula">
-                            <span class="math-frac">
-                                <span class="num">sen(θ<sub>1</sub>)</span>
-                                <span class="den">v<sub>1</sub></span>
-                            </span>
-                            =
-                            <span class="math-frac">
-                                <span class="num">sen(θ<sub>2</sub>)</span>
-                                <span class="den">v<sub>2</sub></span>
-                            </span>
+                            $$ \frac{\sin(\theta_1)}{v_1} = \frac{\sin(\theta_2)}{v_2} $$
                         </div>
                         <span class="desc">Lei de Snell para ondas acústicas (meios com diferentes velocidades de propagação)</span>
                     </div>
@@ -622,52 +575,50 @@ body {
         </div>
     </div>
 
-    <!-- ===== GRÁFICO DE ESPECTRO ===== -->
     <div class="spectrum-card">
         <div class="spectrum-header">
             <i class="fas fa-chart-bar"></i>
-            <h3>📊 Espectro Audiométrico Comparado dos Animais</h3>
+            <h3>Espectro Audiométrico Comparado dos Animais</h3>
         </div>
         <div class="chart-wrapper">
             <canvas id="spectrumCanvas"></canvas>
         </div>
     </div>
 
-    <!-- ===== DOPPLER ===== -->
     <div class="edu-card">
         <div class="card-header">
             <div class="card-header-icon"><i class="fas fa-satellite-dish"></i></div>
-            <h2>🌊 Efeito Doppler Dinâmico & Ecolocalização Animal</h2>
+            <h2>Efeito Doppler Dinâmico & Ecolocalização Animal</h2>
             <div class="badge">Simulador Otimizado</div>
         </div>
 
         <div class="control-panel">
             <div class="controls-row">
-                <div class="control-group-edu">
+                <div class="control-group-edu wide">
                     <label><i class="fas fa-paw"></i> Emissor</label>
                     <select id="animal" onchange="updateDefaultFrequency()">
-                        <option value="bat">🦇 Morcego (Ar)</option>
-                        <option value="dolphin">🐬 Golfinho (Água)</option>
+                        <option value="bat">Morcego (Ar)</option>
+                        <option value="dolphin">Golfinho (Água)</option>
                     </select>
                 </div>
                 <div class="control-group-edu">
                     <label>Vel. Animal (m/s)</label>
-                    <input type="number" id="vAnimal" value="10.0" step="0.5">
+                    <input type="number" id="vAnimal" value="1.0" step="0.5">
                 </div>
                 <div class="control-group-edu">
                     <label>Vel. Alvo (m/s)</label>
-                    <input type="number" id="vTarget" value="-5.0" step="0.5">
+                    <input type="number" id="vTarget" value="-1.0" step="0.5">
                 </div>
                 <div class="control-group-edu">
                     <label>Frequência (Hz)</label>
                     <input type="number" id="freq" value="60000" step="1000">
                 </div>
-                <div class="control-group-edu">
+                <div class="control-group-edu wide">
                     <label>Alvo</label>
                     <select id="targetType">
-                        <option value="fish">🐟 Presa Orgânica (85%)</option>
-                        <option value="rock">🪨 Rocha (45%)</option>
-                        <option value="plastic">🧴 Plástico (15%)</option>
+                        <option value="fish">Presa Orgânica (85%)</option>
+                        <option value="rock">Rocha (45%)</option>
+                        <option value="plastic">Plástico (15%)</option>
                     </select>
                 </div>
             </div>
@@ -676,33 +627,17 @@ body {
                 <button class="btn-edu btn-edu-secondary" onclick="stopDoppler()"><i class="fas fa-pause"></i> Pausar</button>
                 <button class="btn-edu btn-edu-warning" onclick="resetPositions()"><i class="fas fa-sync-alt"></i> Resetar</button>
                 <button class="btn-edu btn-edu-warning" id="btnToggleDopplerChallenge" onclick="toggleDopplerChallengeMode()" style="margin-left: auto;">
-                    <i class="fas fa-trophy"></i> Ativar Modo Desafio
+                    <i class="fas fa-trophy"></i> Ativar Desafio
                 </button>
             </div>
         </div>
 
-        <!-- DESAFIO DOPPLER -->
         <div class="challenge-box" id="dopplerChallengeBox" style="margin: 16px;">
             <div class="challenge-title"><i class="fas fa-brain"></i> Desafio de Ecolocalização Ativo!</div>
             
             <div class="challenge-math">
-                <span class="math">
-                    f<sub>eco</sub> = f<sub>0</sub> · 
-                    <span class="hl">
-                        <span class="math-frac-sm">
-                            <span class="num">v<sub>som</sub> + v<sub>alvo</sub></span>
-                            <span class="den">v<sub>som</sub> − v<sub>emissor</sub></span>
-                        </span>
-                    </span>
-                    · 
-                    <span class="hl">
-                        <span class="math-frac-sm">
-                            <span class="num">v<sub>som</sub> + v<sub>emissor</sub></span>
-                            <span class="den">v<sub>som</sub> − v<sub>alvo</sub></span>
-                        </span>
-                    </span>
-                </span>
-                <br><span style="font-size:0.75rem; color:#94a3b8; font-family:'Inter',sans-serif;">Doppler duplo para eco retornado (predador → presa → predador)</span>
+                $$ f_{\text{eco}} = f_0 \cdot \left( \frac{v_{\text{som}} + v_{\text{alvo}}}{v_{\text{som}} - v_{\text{emissor}}} \right) \cdot \left( \frac{v_{\text{som}} + v_{\text{emissor}}}{v_{\text{som}} - v_{\text{alvo}}} \right) $$
+                <br><span style="font-size:0.75rem; color:#94a3b8; font-family:'Inter',sans-serif;">Doppler duplo para eco retornado</span>
             </div>
             
             <div class="challenge-text" id="dopplerChallengeText">Carregando pergunta...</div>
@@ -754,27 +689,26 @@ body {
         </div>
     </div>
 
-    <!-- ===== SNELL ===== -->
     <div class="edu-card">
         <div class="card-header">
             <div class="card-header-icon"><i class="fas fa-water"></i></div>
-            <h2>🐋 Lei de Snell Acústica, Cenários Biofísicos & Canal SOFAR</h2>
+            <h2>Lei de Snell Acústica, Cenários Biofísicos & Canal SOFAR</h2>
             <div class="badge">Refração de Ondas</div>
         </div>
 
         <div class="control-panel" style="border-bottom: 1px solid #cbd5e1;">
             <div class="controls-row">
-                <div class="control-group-edu" style="max-width: 70%;">
-                    <label><i class="fas fa-globe"></i> Escolha um Cenário Biofísico para Carregar os Valores</label>
+                <div class="control-group-edu wide">
+                    <label><i class="fas fa-globe"></i> Cenário Biofísico</label>
                     <select id="scenariosSnell" onchange="applyScenario()">
-                        <option value="sofar">🐋 Oceano Profundo: Canal SOFAR (Água Quente Superficial para Água Fria Profunda)</option>
-                        <option value="martim">🦅 Caça do Martim-Pescador (Onda de Som/Luz cruzando do Ar para a Água)</option>
-                        <option value="fourEyes">🐟 Peixe-Quatro-Olhos (Luz cruzando do Ar para o Meio Ocular Aquoso)</option>
+                        <option value="sofar">Oceano Profundo: Canal SOFAR</option>
+                        <option value="martim">Caça do Martim-Pescador (Ar para Água)</option>
+                        <option value="fourEyes">Peixe-Quatro-Olhos (Ar para Córnea Aquosa)</option>
                     </select>
                 </div>
-                <div style="flex: 1; display: flex; justify-content: flex-end;">
-                    <button class="btn-edu btn-edu-warning" id="btnToggleChallenge" onclick="toggleChallengeMode()">
-                        <i class="fas fa-trophy"></i> Ativar Modo Desafio
+                <div class="btn-container" style="flex: 1; margin-top: 0; justify-content: flex-end;">
+                    <button class="btn-edu btn-edu-warning" id="btnToggleChallenge" onclick="toggleChallengeMode()" style="width: 100%;">
+                        <i class="fas fa-trophy"></i> Ativar Desafio
                     </button>
                 </div>
             </div>
@@ -782,7 +716,7 @@ body {
 
         <div class="snell-grid">
             <div class="canvas-box">
-                <div class="canvas-title" id="canvasSnellTitle"><i class="fas fa-crosshairs"></i> Clique e Arraste o Emissor para Mudar o Ângulo do Feixe</div>
+                <div class="canvas-title" id="canvasSnellTitle"><i class="fas fa-crosshairs"></i> Arraste o Emissor (Mudar Ângulo)</div>
                 <div class="snell-container">
                     <canvas id="snellCanvas" width="600" height="220"></canvas>
                 </div>
@@ -792,22 +726,11 @@ body {
                 <div class="canvas-box" style="height: 100%;">
                     <div class="canvas-title" id="mathDisplayTitle"><i class="fas fa-calculator"></i> Verificação Biofísica</div>
                     
-                    <!-- DESAFIO SNELL -->
                     <div class="challenge-box" id="challengeBox">
                         <div class="challenge-title"><i class="fas fa-brain"></i> Desafio Biofísico Ativo!</div>
                         
                         <div class="challenge-math">
-                            <span class="math">
-                                <span class="math-frac-sm">
-                                    <span class="num">sen(θ<sub>1</sub>)</span>
-                                    <span class="den">v<sub>1</sub></span>
-                                </span>
-                                =
-                                <span class="math-frac-sm">
-                                    <span class="num">sen(θ<sub>2</sub>)</span>
-                                    <span class="den">v<sub>2</sub></span>
-                                </span>
-                            </span>
+                            $$ \frac{\sin(\theta_1)}{v_1} = \frac{\sin(\theta_2)}{v_2} $$
                             <br><span style="font-size:0.75rem; color:#94a3b8; font-family:'Inter',sans-serif;">Lei de Snell para ondas acústicas</span>
                         </div>
                         
@@ -828,7 +751,7 @@ body {
                         <strong>O que é o Canal SOFAR?</strong> (Sound Fixing and Ranging Channel). É uma zona no oceano profundo onde a baixa temperatura e a pressão hidrostática ideal criam uma região onde a velocidade do som é a mínima possível. Atuando como uma lente acústica baseada na Lei de Snell, qualquer som emitido dentro dele e que tente escapar sofre refração de volta ao centro ou Reflexão Interna Total. Isso cria um 'guia de ondas' perfeito, permitindo que o canto das baleias viaje por bacias oceânicas inteiras!
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background:#f8fafc; border-top:1px solid #e2e8f0;">
+                    <div class="snell-vars-grid">
                         <div class="control-group-edu">
                             <label id="lbl_v1">Vel. Meio 1 - v₁ (m/s)</label>
                             <input type="number" id="v1_snell" value="1530" step="10" min="0.1" max="3000" oninput="drawSnell()">
@@ -877,12 +800,12 @@ function toggleTheory() {
 // ============================
 const spectrumCtx = document.getElementById("spectrumCanvas").getContext("2d");
 const animaisEspectro = [
-    { nome: "Elefante 🐘", range: [5, 20] },
-    { nome: "Baleia 🐋", range: [10, 10000] },
-    { nome: "Humano 👤", range: [20, 20000] },
-    { nome: "Cachorro 🐕", range: [40, 60000] },
-    { nome: "Golfinho 🐬", range: [40000, 150000] },
-    { nome: "Morcego 🦇", range: [20000, 200000] }
+    { nome: "Elefante", range: [5, 20] },
+    { nome: "Baleia", range: [10, 10000] },
+    { nome: "Humano", range: [20, 20000] },
+    { nome: "Cachorro", range: [40, 60000] },
+    { nome: "Golfinho", range: [40000, 150000] },
+    { nome: "Morcego", range: [20000, 200000] }
 ];
 
 const barGradient = spectrumCtx.createLinearGradient(0, 0, 500, 0);
@@ -1124,12 +1047,12 @@ function toggleDopplerChallengeMode() {
         btn.innerHTML = "<i class='fas fa-eye'></i> Voltar ao Modo Livre";
         btn.className = "btn-edu btn-edu-secondary";
         box.style.display = "block";
-        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Animação pausada para análise do desafio estatístico.";
+        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Animação pausada para análise.";
         
         inputs.forEach(id => document.getElementById(id).disabled = true);
         generateDopplerChallenge();
     } else {
-        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Modo Desafio";
+        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Desafio";
         btn.className = "btn-edu btn-edu-warning";
         box.style.display = "none";
         canvasTitle.innerHTML = "<i class='fas fa-eye'></i> Propagação de Ondas";
@@ -1221,36 +1144,36 @@ let correctChallengeValue = 0;
 const SCENARIOS = {
     sofar: {
         v1: 1530, v2: 1480,
-        name1: "ÁGUA QUENTE / SUPERFÍCIE (Oceano)",
-        name2: "ÁGUA FRIA / CANAL SOFAR (Profundidade)",
+        name1: "ÁGUA QUENTE (Superfície)",
+        name2: "ÁGUA FRIA (Profundidade)",
         lbl1: "Vel. Água Quente (m/s)", lbl2: "Vel. Água Fria (m/s)",
-        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
-        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica [sen(θ₁)/v₁ = sen(θ₂)/v₂]",
+        lblAngle1: "Ângulo Incidente (°)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica",
         mathLabel1: "Razão Meio 1 (sen(θ₁)/v₁):", mathLabel2: "Razão Meio 2 (sen(θ₂)/v₂):",
         icon: "🐋",
-        explanation: "<strong>O que é o Canal SOFAR?</strong> (Sound Fixing and Ranging Channel). É uma zona no oceano profundo onde a baixa temperatura e a pressão hidrostática ideal criam uma região onde a velocidade do som é a mínima possível. Atuando como uma lente acústica baseada na Lei de Snell, qualquer som emitido dentro dele e que tente escapar sofre refração de volta ao centro ou Reflexão Interna Total. Isso cria um 'guia de ondas' perfeito, permitindo que o canto das baleias viaje por bacias oceânicas inteiras!"
+        explanation: "<strong>O que é o Canal SOFAR?</strong> É uma zona no oceano profundo onde a baixa temperatura e a pressão hidrostática ideal criam uma região onde a velocidade do som é a mínima possível. Qualquer som emitido dentro dele e que tente escapar sofre refração de volta ao centro ou Reflexão Interna Total. Isso cria um 'guia de ondas' perfeito, permitindo que o canto das baleias viaje por bacias oceânicas inteiras!"
     },
     martim: {
         v1: 343, v2: 1480,
-        name1: "MEIO EXTERNO (Ar Atmosférico)",
-        name2: "MEIO AQUÁTICO (Rio/Mar)",
+        name1: "MEIO EXTERNO (Ar)",
+        name2: "MEIO AQUÁTICO (Água)",
         lbl1: "Vel. Som no Ar (m/s)", lbl2: "Vel. Som na Água (m/s)",
-        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
-        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica [sen(θ₁)/v₁ = sen(θ₂)/v₂]",
+        lblAngle1: "Ângulo Incidente (°)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Biofísica",
         mathLabel1: "Razão Meio 1 (sen(θ₁)/v₁):", mathLabel2: "Razão Meio 2 (sen(θ₂)/v₂):",
         icon: "🦅",
-        explanation: "<strong>O Martim-Pescador e a Barreira de Meios:</strong> Quando a ave vocaliza ou mergulha, as ondas mecânicas e luminosas sofrem uma transição drástica do Ar para a Água. Pelo fato da velocidade mudar abruptamente, o ângulo se fecha severamente de acordo com a Lei de Snell. Para a captura mecânica e a visão corretiva da presa, o animal precisa calcular instintivamente essa distorção angular!"
+        explanation: "<strong>O Martim-Pescador:</strong> Quando a ave vocaliza ou mergulha, as ondas mecânicas e luminosas sofrem uma transição drástica do Ar para a Água. Pelo fato da velocidade mudar abruptamente, o ângulo se fecha severamente. Para a captura mecânica da presa, o animal precisa calcular instintivamente essa distorção angular!"
     },
     fourEyes: {
         v1: 1.0, v2: 1.33,
-        name1: "MEIO AÉREO (Visão de Cima - Ar)",
-        name2: "CÓRNEA / ÁGUA (Visão de Baixo)",
+        name1: "MEIO AÉREO (Visão de Cima)",
+        name2: "CÓRNEA (Visão de Baixo)",
         lbl1: "Índice do Ar (n₁)", lbl2: "Índice da Água (n₂)",
-        lblAngle1: "Ângulo Incidente (graus)", lblAngle2: "Ângulo Refratado",
-        mathTitle: "<i class='fas fa-calculator'></i> Verificação Óptica [n₁·sen(θ₁) = n₂·sen(θ₂)]",
+        lblAngle1: "Ângulo Incidente (°)", lblAngle2: "Ângulo Refratado",
+        mathTitle: "<i class='fas fa-calculator'></i> Verificação Óptica",
         mathLabel1: "Razão Meio 1 (n₁·sen(θ₁)):", mathLabel2: "Razão Meio 2 (n₂·sen(θ₂)):",
         icon: "🐟",
-        explanation: "<strong>O Peixe-Quatro-Olhos (Anableps anableps):</strong> Este incrível animal vive estritamente na linha d'água. Seus olhos são divididos ao meio. A metade superior capta luz vinda do ar (n₁ = 1.0) e a inferior capta na água (n₂ = 1.33). A Lei de Snell força a luz externa a desviar, e o peixe possui lentes cristalinas com geometrias assimétricas diferentes para focar perfeitamente ambos os feixes simultaneamente!"
+        explanation: "<strong>O Peixe-Quatro-Olhos:</strong> Vive estritamente na linha d'água e seus olhos são divididos ao meio. A metade superior capta luz vinda do ar (n₁ = 1.0) e a inferior capta na água (n₂ = 1.33). A Lei de Snell força a luz a desviar, e o peixe possui lentes cristalinas assimétricas para focar perfeitamente ambos os feixes!"
     }
 };
 
@@ -1372,6 +1295,8 @@ function drawSnell() {
 
 function handleMouseSnell(e) {
     if (challengeModeActive) return; 
+    
+    /* Pega as coordenadas reais renderizadas na tela para suportar a responsividade do CSS */
     const rect = snellCanvas.getBoundingClientRect();
     const mx = (e.clientX - rect.left) * (snellCanvas.width / rect.width);
     const my = (e.clientY - rect.top) * (snellCanvas.height / rect.height);
@@ -1392,6 +1317,9 @@ function handleMouseSnell(e) {
 snellCanvas.addEventListener("mousedown", e => { draggingSnell = true; handleMouseSnell(e); });
 snellCanvas.addEventListener("mousemove", e => { if (draggingSnell) handleMouseSnell(e); });
 window.addEventListener("mouseup", () => draggingSnell = false);
+snellCanvas.addEventListener("touchstart", e => { e.preventDefault(); draggingSnell = true; handleMouseSnell(e.touches[0]); }, {passive: false});
+snellCanvas.addEventListener("touchmove", e => { e.preventDefault(); if (draggingSnell) handleMouseSnell(e.touches[0]); }, {passive: false});
+window.addEventListener("touchend", () => draggingSnell = false);
 
 angleIncInput.addEventListener("input", () => {
     if (challengeModeActive) return;
@@ -1407,18 +1335,18 @@ function toggleChallengeMode() {
     const canvasTitle = document.getElementById("canvasSnellTitle");
 
     if (challengeModeActive) {
-        btn.innerHTML = "<i class='fas fa-eye'></i> Voltar ao Modo Livre";
+        btn.innerHTML = "<i class='fas fa-eye'></i> Sair do Desafio";
         btn.className = "btn-edu btn-edu-secondary";
         box.style.display = "block";
         mathDisplay.style.display = "none";
-        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Interface travada para o Desafio!";
+        canvasTitle.innerHTML = "<i class='fas fa-lock'></i> Interface travada!";
         generateChallenge();
     } else {
-        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Modo Desafio";
+        btn.innerHTML = "<i class='fas fa-trophy'></i> Ativar Desafio";
         btn.className = "btn-edu btn-edu-warning";
         box.style.display = "none";
         mathDisplay.style.display = "block";
-        canvasTitle.innerHTML = "<i class='fas fa-crosshairs'></i> Clique e Arraste o Emissor para Mudar o Ângulo do Feixe";
+        canvasTitle.innerHTML = "<i class='fas fa-crosshairs'></i> Arraste o Emissor (Mudar Ângulo)";
         
         document.getElementById("v1_snell").readOnly = false;
         document.getElementById("v2_snell").readOnly = false;
@@ -1499,7 +1427,7 @@ function checkChallengeAnswer() {
 
     const diff = Math.abs(userAns - correctChallengeValue);
     if (diff <= 0.5) {
-        feedback.innerText = "Correcto! Excelente cálculo biofísico. Resposta esperada: " + correctChallengeValue.toFixed(1);
+        feedback.innerText = "Correto! Excelente cálculo biofísico. Resposta esperada: " + correctChallengeValue.toFixed(1);
         feedback.style.color = "#16a34a";
     } else {
         feedback.innerText = "Ainda não é o valor correto. Tente novamente! Lembre-se de usar a calculadora de apoio.";
